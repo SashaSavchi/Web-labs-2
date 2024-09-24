@@ -1,0 +1,32 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: black;
+    color: white;
+  }
+  
+  h1 {
+    font-size: 30px;
+    text-align: center;
+  }
+  
+  p {
+    font-size: 24px;
+    text-align: center;
+  }
+  
+  a {
+    color: white;
+    text-decoration: underline;
+  }
+  
+  a:hover {
+    color: rgb(135, 168, 217);
+    text-decoration: underline;
+  }
+  
+  img {
+    width: auto; 
+    height: auto; 
+    display: block; 
+    margin: auto; 
+  }

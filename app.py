@@ -3,12 +3,29 @@ app = Flask(__name__)
 
 @app.errorhandler(404)
 def not_found(err):
-    return "Такой страницы нет :(", 404
+    css_err = url_for("static", filename="err.css")
+    img_err = url_for("static", filename="404.png")
+    return f'''
+        <!doctype html>
+        <html>
+            <head>
+                <title>Страница не найдена</title>
+                <link rel="stylesheet" href="{css_err}">
+            </head>
+            <body>
+                <h1>Страница не найдена</h1>
+                <p>К сожалению, запрашиваемая Вами страница не была найдена.</p>
+                <p>Вы можете перейти на <a href="/">главную страницу</a> или попробовать воспользоваться поиском.</p>
+                <img src="''' + img_err + '''">
+            </body>
+        </html>''', 404
+
+
 # ошибки
 # @app.errorhandler(400)
 # def bad_request(err):
 #     return "400 Bad Request", 400
-    
+
 # @app.errorhandler(401)
 # def unauthorized(err):
 #     return "401 Unauthorized", 401
