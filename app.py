@@ -21,6 +21,26 @@ def not_found(err):
         </html>''', 404
 
 
+# перехватчик ошибки
+@app.route('/error')
+def error():
+    return 1 + '2'
+#Конкатенация числа и строки вызовет ошибку на сервере
+@app.errorhandler(500)
+def server_error(err):
+    return '''
+        <!doctype html>
+        <html>
+            <head>
+                <title>Внутренняя ошибка сервера</title>
+            </head>
+            <body>
+                <h1>Произошла внутренняя ошибка сервера</h1>
+                <p>
+                    Приносим свои извинения за неудобства. Пожалуйста, попробуйте обновить страницу или вернуться позже.
+                </p>
+            </body>
+        </html>''', 500
 # ошибки
 # @app.errorhandler(400)
 # def bad_request(err):
