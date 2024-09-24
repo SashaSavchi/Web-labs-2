@@ -1,0 +1,22 @@
+body { 
+    /* полосатый фон с CSS функцией repeating-linear-gradient()*/
+    background: repeating-linear-gradient( 
+        to right, /*в качестве угла наклона*/
+        #f6f6f6,
+        #f6f6f6 10px,
+        #ffffff 10px,
+        #ffffff 20px
+      );
+}
+
+img {
+    width: auto; 
+    height: auto; 
+    display: block; 
+    margin: auto; 
+}
+
+h1 {
+    text-align: center; 
+    color: darkgreen;
+}
