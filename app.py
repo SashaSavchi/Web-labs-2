@@ -22,7 +22,7 @@ def not_found(err):
 
 
 # перехватчик ошибки
-@app.route('/error')
+@app.route('/lab1/error')
 def error():
     return 1 + '2'
 #Конкатенация числа и строки вызовет ошибку на сервере
@@ -267,3 +267,70 @@ def im_a_teapot():
     </body>
 </html>
 ''', 418
+
+# Кастомный роут
+@app.route('/lab1/about')
+def about():
+    img_path = url_for("static", filename="pipl.jpg")
+    return f'''
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Необходимое нужное</title>
+        <style>
+            body {{
+                text-align: center;
+                background-color: #f0f0f0;
+                font-family: Arial, sans-serif;
+            }}
+            pre {{
+                display: inline-block;
+                margin: 20px;
+                text-align: left;
+            }}
+            img {{
+                width: auto;
+                height: auto;
+            }}
+        </style>
+    </head>
+    <body>
+        <h1>Необходимое нужное</h1>
+        <pre>
+            на белом фоне 
+            в белом шуме 
+            бегут не оглядываясь
+            от неусыпных забот 
+            от объятий устали 
+            от тоски бушующей
+            сбросив с себя опасения мучившие
+
+            пока они молоды 
+            поют громко оперы 
+            не сбивая движение
+            мчащихся встреченных 
+            не слышат здоровье
+            упрямятся разуму
+            но как же им весело 
+            обращаются к разному 
+            бесцельно рассматривают и освещают
+            еле заметное не каждому значимое
+            необходимое нужное 
+
+            воскресные дети
+            неспешной походкой 
+            не страшась больше дыма
+            сияют ярко
+            освещают 
+            сияют ярко 
+            освещают 
+            необходимое нужное
+        </pre>
+            <img src="''' + img_path + '''">
+    </body>
+</html>
+''', 200, {
+        'Content-Language': 'ru',
+        'X-CustomHeader-1': 'Written',
+        'X-CustomHeader-2': 'earlier',
+    }
