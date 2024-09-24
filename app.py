@@ -205,17 +205,17 @@ def info():
     return redirect ('/lab1/author')
 
 
-@app.route('/lab1/created')
-def created():
-    return '''
-<!DOCTYPE html>
-<html>
-    <body>
-        <h1>Создано успешно</h1>
-        <div><i>что-то создано...создано что-то...</i></div>
-    </body>
-</html>
-''', 201
+# @app.route('/lab1/created')
+# def created():
+#     return '''
+# <!DOCTYPE html>
+# <html>
+#     <body>
+#         <h1>Создано успешно</h1>
+#         <div><i>что-то создано...создано что-то...</i></div>
+#     </body>
+# </html>
+# ''', 201
 
 
 # страницы с ошибками
@@ -356,3 +356,122 @@ def about():
         'X-CustomHeader-1': 'Written',
         'X-CustomHeader-2': 'earlier',
     }
+
+
+# Доп задание. Ресурс
+resource_exists = False
+
+@app.route('/lab1/created')
+def create_resource():
+    global resource_exists
+    if not resource_exists:
+        resource_exists = True
+        return '''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Ресурс Создан</title>
+        </head>
+        <body>
+            <h1>Ресурс создан успешно</h1>
+            <a href="/lab1/resource">Вернуться к статусу ресурса</a>
+        </body>
+        </html>
+        ''', 201
+    else:
+        return '''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Ошибка</title>
+        </head>
+        <body>
+            <h1>Ошибка создания ресурса</h1>
+            <p>Ресурс уже создан.</p>
+            <a href="/lab1/resource">Вернуться к статусу ресурса</a>
+        </body>
+        </html>
+        ''', 400
+
+@app.route('/lab1/delete')
+def delete_resource():
+    global resource_exists
+    if resource_exists:
+        resource_exists = False
+        return '''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Ресурс Удалён</title>
+        </head>
+        <body>
+            <h1>Ресурс удалён успешно</h1>
+            <a href="/lab1/resource">Вернуться к статусу ресурса</a>
+        </body>
+        </html>
+        ''', 201
+    else:
+        return '''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Ошибка</title>
+        </head>
+        <body>
+            <h1>Ошибка удаления ресурса</h1>
+            <p>Ресурс отсутствует.</p>
+            <a href="/lab1/resource">Вернуться к статусу ресурса</a>
+        </body>
+        </html>
+        ''', 400
+    
+@app.route('/lab1/resource')
+def resource_status():
+    status_message = "ресурс создан" if resource_exists else "ресурс ещё не создан"
+    img_path = url_for("static", filename="painter.png")
+    return f'''
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>Статус Ресурса</title>
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    text-align: center;
+                    background-color: white;
+                    padding: 50px;
+                }}
+                h1 {{
+                    color: black;
+                }}
+                img {{
+                    margin-top: 40px;
+                    width: auto;
+                    height: auto;
+                }}
+                a {{
+                    text-decoration: none;
+                    color: #007bff;
+                    padding: 10px 20px;
+                    border: 1px solid #007bff;
+                    border-radius: 5px;
+                }}
+                a:hover {{
+                    background-color: #007bff;
+                    color: white;
+                }}
+            </style>
+        </head>
+        <body>
+            <h1>Статус ресурса: <span id="status">{status_message}</span></h1>
+            <div>
+                <a href="/lab1/created" id="create-btn">Создать ресурс</a>
+                <a href="/lab1/delete" id="delete-btn">Удалить ресурс</a>
+            </div>
+            <div>
+                <img src="''' + img_path + '''">
+            </div>
+        </body>
+    </html>
+    '''
+
