@@ -4,6 +4,31 @@ app = Flask(__name__)
 @app.errorhandler(404)
 def not_found(err):
     return "Такой страницы нет :(", 404
+# ошибки
+# @app.errorhandler(400)
+# def bad_request(err):
+#     return "400 Bad Request", 400
+    
+# @app.errorhandler(401)
+# def unauthorized(err):
+#     return "401 Unauthorized", 401
+
+# @app.errorhandler(402)
+# def payment_required(err):
+#     return "402 Payment Required", 402
+
+# @app.errorhandler(403)
+# def forbidden(err):
+#     return "403 Forbidden", 403
+
+# @app.errorhandler(405)
+# def method_not_allowed(err):
+#     return "405 Method Not Allowed", 405
+
+# @app.errorhandler(418)
+# def im_a_teapot(err):
+#     return "418 I'm a teapot", 418
+
 
 @app.route("/")
 @app.route("/index")
@@ -25,6 +50,7 @@ def page():
             </body>
         </html>'''
 
+
 @app.route("/lab1")
 def lab1():
     return '''<!doctype html>
@@ -44,6 +70,7 @@ def lab1():
             </body>
         </html>'''
 
+
 @app.route("/lab1/web")
 def web():
     return '''<!doctype html>
@@ -56,6 +83,7 @@ def web():
             'X-server': 'sample',
             'Content-Type':'text/plain; charset=utf-8'
             }
+
 
 @app.route("/lab1/author")
 def author():
@@ -72,6 +100,7 @@ def author():
                 <a href="/lab1/web">web</a>
             </body>
         </html>'''
+
 
 @app.route("/lab1/oak")
 def oak():
@@ -90,7 +119,6 @@ def oak():
 </html>
 '''
 
-count = 0
 
 @app.route('/lab1/counter')
 def counter():
@@ -112,9 +140,11 @@ def clear_counter():
     count = 0
     return redirect(url_for('counter'))
 
+
 @app.route('/lab1/info')
 def info():
     return redirect ('lab1/author')
+
 
 @app.route('/lab1/created')
 def created():
@@ -127,3 +157,76 @@ def created():
     </body>
 </html>
 ''', 201
+
+
+# страницы с ошибками
+@app.route('/lab1/request')
+def bad_request():
+        return '''
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>400 Bad Request (Неверный запрос)</h1>
+        <div><i>Неправильный синтаксис</i></div>
+    </body>
+</html>
+''', 400
+
+@app.route('/lab1/unauthor')
+def unauthorized():
+        return '''
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>401 Unauthorized (Неаутентифицированный)</h1>
+        <div><i>Клиент должен зарегистрироваться</i></div>
+    </body>
+</html>
+''', 401
+
+@app.route('/lab1/payment')
+def payment_required():
+        return '''
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>402 Payment Required (Требуется оплата)</h1>
+        <div><i>Необходим цифровой платеж</i></div>
+    </body>
+</html>
+''', 402
+
+@app.route('/lab1/forbidden')
+def forbidden():
+        return '''
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>403 Forbidden (Доступ запрещен)</h1>
+        <div><i>Требуется авторизация</i></div>
+    </body>
+</html>
+''', 403
+
+@app.route('/lab1/method_na')
+def method_not_allowed():
+    return '''
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>405 Method Not Allowed (Непозволительный метод)</h1>
+    </body>
+</html>
+''', 405
+
+@app.route('/lab1/teapot')
+def im_a_teapot():
+        return '''
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>418 Im a teapot (Я чайник:)</h1>
+        <div><i>Попытка заварить кофе в чайнике отклонена.</i></div>
+    </body>
+</html>
+''', 418
