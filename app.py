@@ -27,15 +27,16 @@ def author():
                 <a href="/web">web</a>
            </body>
         </html>'''
+
 @app.route("/lab1/oak")
 def oak():
-    path = url_for("static", filename='oak.jpg')
+    path = url_for("static", filename="oak.jpg")
     return '''
 <!DOCTYPE html>
 <html>
     <body>
         <h1>Дуб</h1>
-        <img src="''' + '''">
+        <img src="''' + path + '''">
     </body>
 </html>
 '''
