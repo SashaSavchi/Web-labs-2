@@ -104,6 +104,28 @@ def lab1():
                     веб-приложений, сознательно предоставляющих лишь самые базовые возможности.
                 </p>
                 <a href="/">На главную</a>
+                <h2>Список роутов</h2>
+                <ul>
+                    <li><a href="/">Список лабораторных</a></li>
+                    <li><a href="/index">Список лабораторных</a></li>
+                    <li><a href="/lab1">Первая лабораторная</a></li>
+                    <li><a href="/lab1/web">Web-сервер на flask</a></li>
+                    <li><a href="/lab1/author">Автор лабораторной</a></li>
+                    <li><a href="/lab1/oak">Дуб</a></li>
+                    <li><a href="/lab1/counter">Счётчик</a></li>
+                    <li><a href="/lab1/clear_counter">Очиститель счётчика</a></li>
+                    <li><a href="/lab1/info">Информация</a></li>
+                    <li><a href="/lab1/created">Код 201</a></li>
+                    <li><a href="/lab1/osh">Ошибка 404</a></li>
+                    <li><a href="/lab1/request">Ошибка. 400 Bad Request</a></li>
+                    <li><a href="/lab1/unauthor">Ошибка. 401 Unauthorized</a></li>
+                    <li><a href="/lab1/payment">Ошибка. 402 Payment Required</a></li>
+                    <li><a href="/lab1/forbidden">Ошибка. 403 Forbidden</a></li>
+                    <li><a href="/lab1/method_na">Ошибка. 405 Method Not Allowed</a></li>
+                    <li><a href="/lab1/teapot">Ошибка. 418 Im a teapot</a></li>
+                    <li><a href="/lab1/error">Перехват ошибки. 500</a></li>
+                    <li><a href="/lab1/about">Кастомный роут</a></li>
+                </ul>
             </body>
         </html>'''
 
@@ -156,7 +178,7 @@ def oak():
 </html>
 '''
 
-
+count = 0
 @app.route('/lab1/counter')
 def counter():
     global count
@@ -180,7 +202,7 @@ def clear_counter():
 
 @app.route('/lab1/info')
 def info():
-    return redirect ('lab1/author')
+    return redirect ('/lab1/author')
 
 
 @app.route('/lab1/created')
@@ -199,48 +221,48 @@ def created():
 # страницы с ошибками
 @app.route('/lab1/request')
 def bad_request():
-        return '''
+    return '''
 <!DOCTYPE html>
 <html>
     <body>
         <h1>400 Bad Request (Неверный запрос)</h1>
-        <div><i>Неправильный синтаксис</i></div>
+        <div>Неправильный синтаксис</div>
     </body>
 </html>
 ''', 400
 
 @app.route('/lab1/unauthor')
 def unauthorized():
-        return '''
+    return '''
 <!DOCTYPE html>
 <html>
     <body>
         <h1>401 Unauthorized (Неаутентифицированный)</h1>
-        <div><i>Клиент должен зарегистрироваться</i></div>
+        <div>Клиент должен зарегистрироваться</div>
     </body>
 </html>
 ''', 401
 
 @app.route('/lab1/payment')
 def payment_required():
-        return '''
+    return '''
 <!DOCTYPE html>
 <html>
     <body>
         <h1>402 Payment Required (Требуется оплата)</h1>
-        <div><i>Необходим цифровой платеж</i></div>
+        <div>Необходим цифровой платеж</div>
     </body>
 </html>
 ''', 402
 
 @app.route('/lab1/forbidden')
 def forbidden():
-        return '''
+    return '''
 <!DOCTYPE html>
 <html>
     <body>
         <h1>403 Forbidden (Доступ запрещен)</h1>
-        <div><i>Требуется авторизация</i></div>
+        <div>Требуется авторизация</div>
     </body>
 </html>
 ''', 403
@@ -258,12 +280,12 @@ def method_not_allowed():
 
 @app.route('/lab1/teapot')
 def im_a_teapot():
-        return '''
+    return '''
 <!DOCTYPE html>
 <html>
     <body>
         <h1>418 Im a teapot (Я чайник:)</h1>
-        <div><i>Попытка заварить кофе в чайнике отклонена.</i></div>
+        <div>Попытка заварить кофе в чайнике отклонена.</div>
     </body>
 </html>
 ''', 418
