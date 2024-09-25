@@ -82,7 +82,7 @@ def page():
                     <li><a href="/lab1">Первая лабораторная</a></li>
                 </ul>
             <footer>
-                Цуканова Александра Руслановна, группа ФБИ-21, курс 3, 2024 год
+                Цуканова Александра Руслановна, группа ФБИ-21, курс 3, год 2024
             </footer>
             </body>
         </html>'''
@@ -125,6 +125,7 @@ def lab1():
                     <li><a href="/lab1/teapot">Ошибка. 418 Im a teapot</a></li>
                     <li><a href="/lab1/error">Перехват ошибки. 500</a></li>
                     <li><a href="/lab1/about">Кастомный роут</a></li>
+                    <li><a href="/lab1/resource">Создание ресурса</a></li>
                 </ul>
             </body>
         </html>'''
@@ -197,7 +198,7 @@ def counter():
 def clear_counter():
     global count
     count = 0
-    return redirect(url_for('counter'))
+    return redirect('/lab1/counter')
 
 
 @app.route('/lab1/info')
