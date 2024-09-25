@@ -349,7 +349,7 @@ def about():
             освещают 
             необходимое нужное
         </pre>
-            <img src="''' + img_path + '''">
+                <img src="{img_path}">
     </body>
 </html>
 ''', 200, {
@@ -470,7 +470,7 @@ def resource_status():
                 <a href="/lab1/delete" id="delete-btn">Удалить ресурс</a>
             </div>
             <div>
-                <img src="''' + img_path + '''">
+                <img src="{img_path}">
             </div>
         </body>
     </html>
