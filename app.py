@@ -476,3 +476,9 @@ def resource_status():
     </html>
     '''
 
+
+
+@app.route('/lab2/a/')
+def a():
+    return 'ok'
+
