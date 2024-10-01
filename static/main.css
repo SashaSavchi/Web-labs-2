@@ -1,0 +1,33 @@
+body {
+    color: maroon;
+    margin: 0px;
+    /* background-image: url("https://i.pinimg.com/564x/f2/bd/60/f2bd603b285613ec461756d4dd1f65ed.jpg") */
+}
+
+main {
+    background-color: #ffffff;
+    color: rgb(75, 95, 60);
+    margin: 30px;
+    padding: 10px;
+    padding-block: 30px;
+    border-radius: 10px;
+}
+
+header {
+    background-color: maroon;
+    color: white;
+    margin: 0px;
+    padding: 5px; 
+}
+
+footer {
+    background-color: maroon;
+    color: white;
+    margin: 0px;
+    padding: 5px; 
+    text-align: right;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
