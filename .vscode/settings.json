@@ -1,0 +1,5 @@
+{
+    "workbench.activityBar.iconClickBehavior": "toggle",
+    "workbench.view.alwaysShowHeaderActions": true,
+    "workbench.sideBar.location": "left"
+}
