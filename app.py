@@ -489,22 +489,74 @@ def flower(flower_id):
     if flower_id >= len(flower_list):
         return 'такого цветка нет', 404
     else:
-        return 'цветок: ' + flower_list[flower_id]
+        return f'''
+<!doctype html>
+<html>
+    <body>
+        <h1>Цветок: {flower_list[flower_id]}</h1>
+        <a href="/lab2/all_flowers">Все цветы</a>
+    </body>
+</html>
+'''
 
+@app.route('/lab2/add_flower/', defaults={'name': ''})
+# запрос по адресу /lab2/add_flower/ ожидал, что после /add_flower/ 
+# будет следовать значение для параметра <name>. Тк это значение отсутствовало, возникал ответ 404.
 @app.route('/lab2/add_flower/<name>')
 def add_flower(name):
-    flower_list.append(name)
+    if name == '':
+        return 'Вы не задали имя цветка', 400
+    elif name not in flower_list:
+        flower_list.append(name)
+        return f'''
+    <!doctype html>
+    <html>
+        <body>
+            <h1>Добавлен новый цветок</h1>
+            <p>Название нового цветка: {name} </p>
+            <p>Всего цветов: {len(flower_list)}</p>
+            <p>Полный список: {flower_list}</p>
+        </body>
+    </html>
+    '''
+    else:
+        return f'''
+            <!doctype html>
+    <html>
+        <body>
+        <h1>Такой цветок уже есть в списке.</h1>
+        <a href="/lab2/all_flowers">Полный список</a>''', 400
+
+@app.route('/lab2/all_flowers')
+def all_flowers():
+    flowers_html = '<ul>'
+    for flower in flower_list:
+        flowers_html += f'<li>{flower}</li>'
+    flowers_html += '</ul>'
     return f'''
 <!doctype html>
 <html>
     <body>
-        <h1>Добавлен новый цветок</h1>
-        <p>Название нового цветка: {name} </p>
+        <h1>Все цветы</h1>
+        {flowers_html}
         <p>Всего цветов: {len(flower_list)}</p>
-        <p>Полный список: {flower_list}</p>
     </body>
 </html>
 '''
+
+@app.route('/lab2/clear_flowers')
+def clear_flowers():
+    flower_list.clear()
+    return f'''
+<!doctype html>
+<html>
+    <body>
+        <h1>Список цветов очищен</h1>
+        <a href="/lab2/all_flowers">Все цветы</a>
+    </body>
+</html>
+'''
+
 
 @app.route('/lab2/example')
 def example():
@@ -523,3 +575,9 @@ def example():
 @app.route('/lab2/')
 def lab2():
     return render_template('lab2.html')
+
+@app.route('/lab2/filters')
+def filters():
+    phrase = 'О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных...'
+    return render_template('filter.html', phrase = phrase)
+
