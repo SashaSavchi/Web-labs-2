@@ -625,3 +625,44 @@ def books():
     ]
     return render_template('books.html', number_l=number_l, name=name, group=group, 
                            course=course, books=books)
+
+@app.route('/lab2/cups')
+def cups():
+    cups = [
+        {"image": "ch_paper.jpg", "name": "Чашка из листа бумаги", "description": "Керамическая чашка объемом 300 мл. Характерный дизайн под бумагу напоминает об учебных буднях."},
+        {"image": "ch_waves.jpg", "name": "Волнообразная чашка", "description": "Керамическая чашка объемом 250 мл. Волнообразная форма прекрасно подходит для мест с высокой сейсмичностью. "},
+        {"image": "ch_surprise.jpg", "name": "Чашка с сюрпризом", "description": "Керамическая  чашка объемом 300 мл. Фигурка внутри не заставит грустить о закончившемся чае."},
+        {"image": "ch_fingers.jpg", "name": "Чашка пятюня", "description": "Керамическая  чашка объемом 300 мл. Может убежать."},
+        {"image": "ch_rich.jpg", "name": "Чашка для светских бесед", "description": "Фарфоровая чашка с золотистым покрытием объемом 200 мл."},
+        {"image": "ch_ordinary.jpg", "name": "Бюджетная чашка", "description": "Бумажный стаканчик объемом 100 мл. Имеет скрытые таланты."},
+    ]
+    cups_html = '<ul style="list-style-type: none; padding: 0;">'
+    for c in cups:
+        cups_html += f'''
+            <li style="display: flex; align-items: center; margin-bottom: 10px;">
+                <img src="/static/{c['image']}" alt="{c['name']}" style="width:250px; height: 250px; margin-right: 15px;">
+                <div>
+                    <strong>{c['name']}</strong><br>
+                    {c['description']}
+                </div>
+            </li>
+        '''
+    cups_html += '</ul>'
+    return f'''
+<!doctype html>
+<html>
+    <head>
+        <title>Чашки</title>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+            }}
+        </style>
+    </head>
+    <body>
+        <h1>Все чашки</h1>
+        {cups_html}
+        <p>Всего чашек: {len(cups)}</p>
+    </body>
+</html>
+'''
