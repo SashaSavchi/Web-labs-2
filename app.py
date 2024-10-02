@@ -482,6 +482,10 @@ def resource_status():
 def a():
     return 'ok'
 
+@app.route('/lab2/')
+def lab2():
+    return render_template('lab2.html')
+
 
 flower_list = ['роза','тюльпан','незабудка','ромашка']
 @app.route('/lab2/flowers/<int:flower_id>')
@@ -572,10 +576,6 @@ def example():
                            number_l=number_l, name=name, group=group, 
                            course=course, fruits=fruits)
 
-@app.route('/lab2/')
-def lab2():
-    return render_template('lab2.html')
-
 
 @app.route('/lab2/filters')
 def filters():
@@ -607,3 +607,21 @@ def calc_default():
 def calc_a(a):
     return redirect(f'/lab2/calc/{a}/1')
 
+
+@app.route('/lab2/books')
+def books():
+    name, number_l, group, course ='Александра Цуканова', 2, 'ФБИ-21', 3
+    books = [
+        {'author': 'Джек Лондон', 'title': 'Мартин Иден', 'genre': 'Роман', 'pages': 480},
+        {'author': 'Этель Лилиан Войнич', 'title': 'Овод', 'genre': 'Роман', 'pages': 352},
+        {'author': 'Сюзанна Кейсен', 'title': 'Прерванная дружба', 'genre': 'Мемуары', 'pages': 239},
+        {'author': 'Мэри Рено', 'title': 'Схимник', 'genre': 'Исторический роман', 'pages': 432},
+        {'author': 'Джордж Оруэлл', 'title': '1984', 'genre': 'Антиутопия', 'pages': 328},
+        {'author': 'Рэй Брэдбери', 'title': '451 градус по Фаренгейту', 'genre': 'Антиутопия', 'pages': 176},
+        {'author': 'Чарльз Диккенс', 'title': 'Большие надежды', 'genre': 'Роман', 'pages': 544},
+        {'author': 'Диана Уинн Джонс', 'title': 'Ходячий замок', 'genre': 'Фэнтези', 'pages': 320},
+        {'author': 'Джек Лондон', 'title': 'Белый клык', 'genre': 'Роман', 'pages': 256},
+        {'author': 'Айн Рэнд', 'title': 'Атлант расправил плечи', 'genre': 'Философский роман', 'pages': 1168}
+    ]
+    return render_template('books.html', number_l=number_l, name=name, group=group, 
+                           course=course, books=books)
