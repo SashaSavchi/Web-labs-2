@@ -31,3 +31,26 @@ footer {
     right: 0;
     left: 0;
 }
+
+a {
+    color: rgb(165, 245, 242);
+    text-decoration: none;
+}
+
+a:link {
+    color: rgb(197, 130, 130);
+}
+
+a:visited {
+    color: blueviolet;
+}
+
+a:hover {
+    color: rgb(176, 125, 192);
+    text-decoration: underline;
+}
+
+a:active {
+    color: rgb(158, 151, 212);
+}
+

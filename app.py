@@ -69,7 +69,7 @@ def server_error(err):
 
 @app.route("/")
 @app.route("/index")
-def page():
+def index():
     return '''
         <!doctype html>
         <html>
@@ -80,7 +80,7 @@ def page():
                 <h1>НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных</h1>
                 <ul>
                     <li><a href="/lab1">Первая лабораторная</a></li>
-                    <li><a href="/lab1">Вторая лабораторная</a></li>
+                    <li><a href="/lab2">Вторая лабораторная</a></li>
                 </ul>
             <footer>
                 Цуканова Александра Руслановна, группа ФБИ-21, курс 3, год 2024
@@ -481,7 +481,10 @@ def resource_status():
 # Лаборпаторная 2
 @app.route('/lab2/a/')
 def a():
-    return 'ok'
+    return 'со слэшем'
+@app.route('/lab2/a')
+def a2():
+    return 'без слэша'
 
 @app.route('/lab2/')
 def lab2():
@@ -545,6 +548,8 @@ def all_flowers():
         <h1>Все цветы</h1>
         {flowers_html}
         <p>Всего цветов: {len(flower_list)}</p>
+        <p><a href="/lab2/add_flower/">Добавить цветок</a></p>
+        <p><a href="/lab2/clear_flowers">Очистить список цветов</a></p>
     </body>
 </html>
 '''
