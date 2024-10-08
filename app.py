@@ -70,11 +70,13 @@ def server_error(err):
 @app.route("/")
 @app.route("/index")
 def index():
-    return '''
+    css_path = url_for("static", filename="main.css")
+    return f'''
         <!doctype html>
         <html>
             <head>
                 <title>НГТУ, ФБ, Лабораторные работы</title>
+                <link rel="stylesheet" href="{css_path}">
             </head>
             <body>
                 <h1>НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных</h1>
@@ -481,10 +483,15 @@ def resource_status():
 # Лаборпаторная 2
 @app.route('/lab2/a/')
 def a():
-    return 'со слэшем'
+    return render_template("base.html", 
+                           lab='Лабораторная работа 2', 
+                           main_content='со слэшем')
+
 @app.route('/lab2/a')
 def a2():
-    return 'без слэша'
+    return render_template("base.html", 
+                           lab='Лабораторная работа 2', 
+                           main_content='без слэша')
 
 @app.route('/lab2/')
 def lab2():
@@ -495,17 +502,15 @@ flower_list = ['роза','тюльпан','незабудка','ромашка'
 @app.route('/lab2/flowers/<int:flower_id>')
 def flower(flower_id):
     if flower_id >= len(flower_list):
-        return 'такого цветка нет', 404
+        return render_template("base.html", 
+                            lab='Лабораторная работа 2', 
+                            main_content='такого цветка нет'), 404 
     else:
-        return f'''
-<!doctype html>
-<html>
-    <body>
-        <h1>Цветок: {flower_list[flower_id]}</h1>
-        <a href="/lab2/all_flowers">Все цветы</a>
-    </body>
-</html>
-'''
+        return render_template("base.html", 
+                           lab='Лабораторная работа 2', 
+                           main_content=f'''
+                           <h1>Цветок: {flower_list[flower_id]}</h1>
+                           <a href="/lab2/all_flowers">Все цветы</a>''')
 
 @app.route('/lab2/add_flower/', defaults={'name': ''})
 # запрос по адресу /lab2/add_flower/ ожидал, что после /add_flower/ 
@@ -513,27 +518,24 @@ def flower(flower_id):
 @app.route('/lab2/add_flower/<name>')
 def add_flower(name):
     if name == '':
-        return 'Вы не задали имя цветка', 400
+        return render_template("base.html", 
+                    lab='Лабораторная работа 2', 
+                    main_content='Вы не задали имя цветка'), 400
     elif name not in flower_list:
         flower_list.append(name)
-        return f'''
-    <!doctype html>
-    <html>
-        <body>
+        return render_template("base.html", 
+                    lab='Лабораторная работа 2', 
+                    main_content=f'''
             <h1>Добавлен новый цветок</h1>
             <p>Название нового цветка: {name} </p>
             <p>Всего цветов: {len(flower_list)}</p>
-            <p>Полный список: {flower_list}</p>
-        </body>
-    </html>
-    '''
+            <p>Полный список: {flower_list}</p>''')
     else:
-        return f'''
-            <!doctype html>
-    <html>
-        <body>
-        <h1>Такой цветок уже есть в списке.</h1>
-        <a href="/lab2/all_flowers">Полный список</a>''', 400
+        return render_template("base.html", 
+                    lab='Лабораторная работа 2', 
+                    main_content=f'''
+            <h1>Такой цветок уже есть в списке.</h1>
+            <a href="/lab2/all_flowers">Полный список</a>'''), 400
 
 @app.route('/lab2/all_flowers')
 def all_flowers():
@@ -541,31 +543,23 @@ def all_flowers():
     for flower in flower_list:
         flowers_html += f'<li>{flower}</li>'
     flowers_html += '</ul>'
-    return f'''
-<!doctype html>
-<html>
-    <body>
-        <h1>Все цветы</h1>
-        {flowers_html}
-        <p>Всего цветов: {len(flower_list)}</p>
-        <p><a href="/lab2/add_flower/">Добавить цветок</a></p>
-        <p><a href="/lab2/clear_flowers">Очистить список цветов</a></p>
-    </body>
-</html>
-'''
+    return render_template("base.html", 
+                    lab='Лабораторная работа 2', 
+                    main_content=f'''
+            <h1>Все цветы</h1>
+            {flowers_html}
+            <p>Всего цветов: {len(flower_list)}</p>
+            <p><a href="/lab2/add_flower/">Добавить цветок</a></p>
+            <p><a href="/lab2/clear_flowers">Очистить список цветов</a></p>'''), 400
+
 
 @app.route('/lab2/clear_flowers')
 def clear_flowers():
     flower_list.clear()
-    return f'''
-<!doctype html>
-<html>
-    <body>
-        <h1>Список цветов очищен</h1>
-        <a href="/lab2/all_flowers">Все цветы</a>
-    </body>
-</html>
-'''
+    return render_template("base.html", 
+                    lab='Лабораторная работа 2', 
+                    main_content='''<h1>Список цветов очищен</h1>
+        <a href="/lab2/all_flowers">Все цветы</a>''')
 
 
 @app.route('/lab2/example')
@@ -591,19 +585,15 @@ def filters():
 
 @app.route('/lab2/calc/<int:a>/<int:b>')
 def calc(a, b):
-    return f'''
-<!doctype html>
-<html>
-    <body>
-        <h1>Расчёт с параметрами</h1>
-        <p>Сложение: {a} + {b} = {a + b}</p>
-        <p>Вычитание: {a} - {b} = {a - b}</p>
-        <p>Умножение: {a} * {b} = {a * b}</p>
-        <p>Деление: {a} / {b} = {a // b}</p>
-        <p>Возведение в степень: {a}<sup>{b}</sup> = {a ** b}</p>
-    </body>
-</html>
-'''
+    return render_template("base.html", 
+                    lab='Лабораторная работа 2', 
+                    main_content=f'''        
+            <h1>Расчёт с параметрами</h1>
+            <p>Сложение: {a} + {b} = {a + b}</p>
+            <p>Вычитание: {a} - {b} = {a - b}</p>
+            <p>Умножение: {a} * {b} = {a * b}</p>
+            <p>Деление: {a} / {b} = {a / b}</p>
+            <p>Возведение в степень: {a}<sup>{b}</sup> = {a ** b}</p>''')
 
 @app.route('/lab2/calc/')
 def calc_default():
