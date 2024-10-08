@@ -80,6 +80,7 @@ def page():
                 <h1>НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных</h1>
                 <ul>
                     <li><a href="/lab1">Первая лабораторная</a></li>
+                    <li><a href="/lab1">Вторая лабораторная</a></li>
                 </ul>
             <footer>
                 Цуканова Александра Руслановна, группа ФБИ-21, курс 3, год 2024
@@ -610,7 +611,6 @@ def calc_a(a):
 
 @app.route('/lab2/books')
 def books():
-    name, number_l, group, course ='Александра Цуканова', 2, 'ФБИ-21', 3
     books = [
         {'author': 'Джек Лондон', 'title': 'Мартин Иден', 'genre': 'Роман', 'pages': 480},
         {'author': 'Этель Лилиан Войнич', 'title': 'Овод', 'genre': 'Роман', 'pages': 352},
@@ -623,8 +623,7 @@ def books():
         {'author': 'Джек Лондон', 'title': 'Белый клык', 'genre': 'Роман', 'pages': 256},
         {'author': 'Айн Рэнд', 'title': 'Атлант расправил плечи', 'genre': 'Философский роман', 'pages': 1168}
     ]
-    return render_template('books.html', number_l=number_l, name=name, group=group, 
-                           course=course, books=books)
+    return render_template('books.html', books=books)
 
 @app.route('/lab2/cups')
 def cups():
@@ -636,33 +635,4 @@ def cups():
         {"image": "ch_rich.jpg", "name": "Чашка для светских бесед", "description": "Фарфоровая чашка с золотистым покрытием объемом 200 мл."},
         {"image": "ch_ordinary.jpg", "name": "Бюджетная чашка", "description": "Бумажный стаканчик объемом 100 мл. Имеет скрытые таланты."},
     ]
-    cups_html = '<ul style="list-style-type: none; padding: 0;">'
-    for c in cups:
-        cups_html += f'''
-            <li style="display: flex; align-items: center; margin-bottom: 10px;">
-                <img src="/static/{c['image']}" alt="{c['name']}" style="width:250px; height: 250px; margin-right: 15px;">
-                <div>
-                    <strong>{c['name']}</strong><br>
-                    {c['description']}
-                </div>
-            </li>
-        '''
-    cups_html += '</ul>'
-    return f'''
-<!doctype html>
-<html>
-    <head>
-        <title>Чашки</title>
-        <style>
-            body {{
-                font-family: Arial, sans-serif;
-            }}
-        </style>
-    </head>
-    <body>
-        <h1>Все чашки</h1>
-        {cups_html}
-        <p>Всего чашек: {len(cups)}</p>
-    </body>
-</html>
-'''
+    return render_template('cups.html', cups=cups)

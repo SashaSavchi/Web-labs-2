@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block lab %}Лабораторная работа 2{% endblock %}
+
+{% block main %}
+<h1>Все чашки</h1>
+<ul style="list-style-type: none; padding: 0;">
+    {% for c in cups %}
+        <li style="display: flex; align-items: center; margin-bottom: 10px;">
+            <img src="{{ url_for('static', filename=c.image) }}" alt="{{ c.name }}" style="width:250px; height: 250px; margin-right: 15px;">
+            <div>
+                <strong>{{ c.name }}</strong><br>
+                {{ c.description }}
+            </div>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

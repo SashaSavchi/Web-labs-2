@@ -1,48 +1,18 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> 
-        {% if name %} {{ name }}, {% else %} Анонимус,{% endif %}
-        {% if number_l %}Лабораторная работа {{number_l}}{% endif %}
-    </title>
-    <link rel="stylesheet" href="{{ url_for('static',filename='main.css') }}">
-</head>
-<body>
-    <header>
-        WEB-программирование, часть 2. {% if number_l %}Лабораторная работа {{number_l}}{% endif %}
-    </header>
-    <main>
-        <h1>Список книг</h1>
-        <ul>
-            {% for b in books %}
-                <li>Автор: {{ b.author }}</li>
-                <li>Название: {{ b.title }}</li>
-                <li>Жанр: {{ b.genre }}</li>
-                <li>Количество страниц: {{ b.pages }}</li>
-                <br>
-            {% endfor %}
-        </ul>
-    </main>
-    <footer>
-        &copy; 
-        {% if name %}
-            {{ name }}, 
-        {% else %}
-            Анонимус,
-        {% endif %}
-        {% if group %}
-            {{ group }},
-        {% else %}
-            Потерянный
-        {% endif %}
-        {% if course %}
-        {{ course }} курс
-        {% else %}
-            Курс неопределен
-        {% endif %}, 
-        2024
-    </footer>
-    </body>
-</html>
+{% extends 'base.html' %}
+
+{# номер лабораторной работы: #}
+{% block lab %}Лабораторная работа 2{% endblock %}
+
+{# основной контент: #}
+{% block main %}
+    <h1>Список книг</h1>
+    <ul>
+        {% for b in books %}
+            <li>Автор: {{ b.author }}</li>
+            <li>Название: {{ b.title }}</li>
+            <li>Жанр: {{ b.genre }}</li>
+            <li>Количество страниц: {{ b.pages }}</li>
+            <br>
+        {% endfor %}
+    </ul>
+{% endblock %}
