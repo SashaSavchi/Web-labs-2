@@ -1,4 +1,4 @@
-from flask import Flask, url_for, redirect, render_template
+from flask import Flask, url_for, redirect, render_template, request
 app = Flask(__name__)
 
 @app.errorhandler(404)
@@ -498,7 +498,13 @@ def lab2():
     return render_template('lab2.html')
 
 
-flower_list = ['роза','тюльпан','незабудка','ромашка']
+flower_list = [
+    {'name': 'Роза', 'price': 150},
+    {'name': 'Тюльпан', 'price': 80},
+    {'name': 'Незабудка', 'price': 100},
+    {'name': 'Ромашка', 'price': 50}
+]
+# поправить
 @app.route('/lab2/flowers/<int:flower_id>')
 def flower(flower_id):
     if flower_id >= len(flower_list):
@@ -506,52 +512,84 @@ def flower(flower_id):
                             lab='Лабораторная работа 2', 
                             main_content='такого цветка нет'), 404 
     else:
-        return render_template("base.html", 
-                           lab='Лабораторная работа 2', 
-                           main_content=f'''
-                           <h1>Цветок: {flower_list[flower_id]}</h1>
-                           <a href="/lab2/all_flowers">Все цветы</a>''')
+        flower = flower_list[flower_id]
+        return render_template("base.html",
+                               lab='Лабораторная работа 2',
+                               main_content=f'''
+                                   <h1>Цветок: {flower["name"]}</h1>
+                                   <p>Цена: {flower["price"]}&#x20bd;</p>
+                                   <a href="/lab2/all_flowers">Все цветы</a>
+                               ''')
+# @app.route('/lab2/add_flower/', defaults={'name': ''})
+# # запрос по адресу /lab2/add_flower/ ожидал, что после /add_flower/ 
+# # будет следовать значение для параметра <name>. Тк это значение отсутствовало, возникал ответ 404.
+# @app.route('/lab2/add_flower/<name>')
+# def add_flower(name):
+#     if name == '':
+#         return render_template("base.html", 
+#                     lab='Лабораторная работа 2', 
+#                     main_content='Вы не задали имя цветка'), 400
+#     elif name not in flower_list:
+#         flower_list.append(name)
+#         return render_template("base.html", 
+#                     lab='Лабораторная работа 2', 
+#                     main_content=f'''
+#             <h1>Добавлен новый цветок</h1>
+#             <p>Название нового цветка: {name} </p>
+#             <p>Всего цветов: {len(flower_list)}</p>
+#             <p>Полный список: {flower_list}</p>''')
+#     else:
+#         return render_template("base.html", 
+#                     lab='Лабораторная работа 2', 
+#                     main_content=f'''
+#             <h1>Такой цветок уже есть в списке.</h1>
+#             <a href="/lab2/all_flowers">Полный список</a>'''), 400
 
-@app.route('/lab2/add_flower/', defaults={'name': ''})
-# запрос по адресу /lab2/add_flower/ ожидал, что после /add_flower/ 
-# будет следовать значение для параметра <name>. Тк это значение отсутствовало, возникал ответ 404.
-@app.route('/lab2/add_flower/<name>')
-def add_flower(name):
-    if name == '':
-        return render_template("base.html", 
-                    lab='Лабораторная работа 2', 
-                    main_content='Вы не задали имя цветка'), 400
-    elif name not in flower_list:
-        flower_list.append(name)
-        return render_template("base.html", 
-                    lab='Лабораторная работа 2', 
-                    main_content=f'''
-            <h1>Добавлен новый цветок</h1>
-            <p>Название нового цветка: {name} </p>
-            <p>Всего цветов: {len(flower_list)}</p>
-            <p>Полный список: {flower_list}</p>''')
-    else:
-        return render_template("base.html", 
-                    lab='Лабораторная работа 2', 
-                    main_content=f'''
-            <h1>Такой цветок уже есть в списке.</h1>
-            <a href="/lab2/all_flowers">Полный список</a>'''), 400
-
+# из доп задания
 @app.route('/lab2/all_flowers')
 def all_flowers():
-    flowers_html = '<ul>'
-    for flower in flower_list:
-        flowers_html += f'<li>{flower}</li>'
-    flowers_html += '</ul>'
+    message = request.args.get('message')  # Получаем сообщение из параметров URL
+    flowers_html = '<ol>'
+    for index, flower in enumerate(flower_list):
+        flowers_html += f'''<li>{flower["name"]} - {flower["price"]}&#x20bd; 
+        <a href="/lab2/del_flower/{index}">Удалить</a></li>'''
+    flowers_html += '</ol>'
+    add_flower_form = '''
+        <form action="/lab2/add_flower" method="post">
+            <input type="text" name="flower_name" placeholder="Имя цветка" required>
+            <input type="number" min="0" name="flower_price" placeholder="Цена цветка" required>
+            <button type="submit">Добавить</button>
+        </form>
+    '''
     return render_template("base.html", 
                     lab='Лабораторная работа 2', 
                     main_content=f'''
             <h1>Все цветы</h1>
             {flowers_html}
             <p>Всего цветов: {len(flower_list)}</p>
-            <p><a href="/lab2/add_flower/">Добавить цветок</a></p>
-            <p><a href="/lab2/clear_flowers">Очистить список цветов</a></p>'''), 400
+            <p><a href="/lab2/clear_flowers">Очистить список цветов</a></p>
+            <h2>Добавить новый цветок</h2>
+            {add_flower_form}
+            {'<p style="color: red;">' + message + '</p>' if message else ''}
+            ''')
 
+@app.route('/lab2/add_flower', methods=['POST'])
+def add_flower():
+    flower_name = request.form['flower_name']
+    flower_price = request.form['flower_price']
+    if any(flower['name'] == flower_name for flower in flower_list):
+        return redirect('/lab2/all_flowers?message=Такой%20цветок%20уже%20есть%20в%20списке.')
+    else:
+        flower_list.append({"name": flower_name, "price": flower_price})
+        return redirect('/lab2/all_flowers')
+
+@app.route('/lab2/del_flower/<int:flower_id>')
+def del_flower(flower_id):
+    if flower_id >= len(flower_list):
+        return "Цветка с таким номером нет", 404
+    else:
+        del flower_list[flower_id]  # del Удаляем цветок по индексу
+        return redirect('/lab2/all_flowers')
 
 @app.route('/lab2/clear_flowers')
 def clear_flowers():
