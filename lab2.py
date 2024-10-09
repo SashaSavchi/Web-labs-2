@@ -17,7 +17,7 @@ def a2():
 
 
 @lab2.route('/lab2/')
-def lab21():
+def lab():
     return render_template('lab2.html')
 
 
