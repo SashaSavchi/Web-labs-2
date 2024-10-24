@@ -54,3 +54,9 @@ a:active {
     color: rgb(158, 151, 212);
 }
 
+.error {
+    color: red;
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 5px;
+}
