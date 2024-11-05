@@ -11,7 +11,7 @@ app.register_blueprint(lab3)
 @app.route("/")
 @app.route("/index")
 def index():
-    css_path = url_for("static", filename="main.css")
+    css_path = url_for("static", filename="lab1/main.css")
     return f'''
         <!doctype html>
         <html>

@@ -18,7 +18,7 @@ def a2():
 
 @lab2.route('/lab2/')
 def lab():
-    return render_template('lab2.html')
+    return render_template('lab2/lab2.html')
 
 
 flower_list = [
@@ -137,7 +137,7 @@ def example():
         {'name': 'мандарины', 'price': 95},
         {'name': 'манго', 'price': 321}
     ]
-    return render_template('example.html', 
+    return render_template('lab2/example.html', 
                            number_l=number_l, name=name, group=group, 
                            course=course, fruits=fruits)
 
@@ -145,7 +145,7 @@ def example():
 @lab2.route('/lab2/filters')
 def filters():
     phrase = 'О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных...'
-    return render_template('filter.html', phrase = phrase)
+    return render_template('lab2/filter.html', phrase = phrase)
 
 
 @lab2.route('/lab2/calc/<int:a>/<int:b>')
@@ -185,17 +185,17 @@ def books():
         {'author': 'Джек Лондон', 'title': 'Белый клык', 'genre': 'Роман', 'pages': 256},
         {'author': 'Айн Рэнд', 'title': 'Атлант расправил плечи', 'genre': 'Философский роман', 'pages': 1168}
     ]
-    return render_template('books.html', books=books)
+    return render_template('lab2/books.html', books=books)
 
 
 @lab2.route('/lab2/cups')
 def cups():
     cups = [
-        {"image": "ch_paper.jpg", "name": "Чашка из листа бумаги", "description": "Керамическая чашка объемом 300 мл. Характерный дизайн под бумагу напоминает об учебных буднях."},
-        {"image": "ch_waves.jpg", "name": "Волнообразная чашка", "description": "Керамическая чашка объемом 250 мл. Волнообразная форма прекрасно подходит для мест с высокой сейсмичностью. "},
-        {"image": "ch_surprise.jpg", "name": "Чашка с сюрпризом", "description": "Керамическая  чашка объемом 300 мл. Фигурка внутри не заставит грустить о закончившемся чае."},
-        {"image": "ch_fingers.jpg", "name": "Чашка пятюня", "description": "Керамическая  чашка объемом 300 мл. Может убежать."},
-        {"image": "ch_rich.jpg", "name": "Чашка для светских бесед", "description": "Фарфоровая чашка с золотистым покрытием объемом 200 мл."},
-        {"image": "ch_ordinary.jpg", "name": "Бюджетная чашка", "description": "Бумажный стаканчик объемом 100 мл. Имеет скрытые таланты."},
+        {"image": "lab2/ch_paper.jpg", "name": "Чашка из листа бумаги", "description": "Керамическая чашка объемом 300 мл. Характерный дизайн под бумагу напоминает об учебных буднях."},
+        {"image": "lab2/ch_waves.jpg", "name": "Волнообразная чашка", "description": "Керамическая чашка объемом 250 мл. Волнообразная форма прекрасно подходит для мест с высокой сейсмичностью. "},
+        {"image": "lab2/ch_surprise.jpg", "name": "Чашка с сюрпризом", "description": "Керамическая  чашка объемом 300 мл. Фигурка внутри не заставит грустить о закончившемся чае."},
+        {"image": "lab2/ch_fingers.jpg", "name": "Чашка пятюня", "description": "Керамическая  чашка объемом 300 мл. Может убежать."},
+        {"image": "lab2/ch_rich.jpg", "name": "Чашка для светских бесед", "description": "Фарфоровая чашка с золотистым покрытием объемом 200 мл."},
+        {"image": "lab2/ch_ordinary.jpg", "name": "Бюджетная чашка", "description": "Бумажный стаканчик объемом 100 мл. Имеет скрытые таланты."},
     ]
-    return render_template('cups.html', cups=cups)
+    return render_template('lab2/cups.html', cups=cups)

@@ -24,6 +24,10 @@ def del_cookie():
     resp.delete_cookie('name')
     resp.delete_cookie('age')
     resp.delete_cookie('name_color')
+    resp.delete_cookie('bcolor')
+    resp.delete_cookie('color')
+    resp.delete_cookie('font_size')
+    resp.delete_cookie('font_family')
     return resp
 
 

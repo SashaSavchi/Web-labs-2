@@ -83,8 +83,8 @@ def author():
 
 @lab1.route("/lab1/oak")
 def oak():
-    css_path = url_for("static", filename="lab1.css")
-    img_path = url_for("static", filename="oak.jpg")
+    css_path = url_for("static", filename="lab1/lab1.css")
+    img_path = url_for("static", filename="lab1/oak.jpg")
     return f'''
 <!DOCTYPE html>
 <html>
@@ -221,7 +221,7 @@ def im_a_teapot():
 # Кастомный роут
 @lab1.route('/lab1/about')
 def about():
-    img_path = url_for("static", filename="pipl.jpg")
+    img_path = url_for("static", filename="lab1/pipl.jpg")
     return f'''
 <!DOCTYPE html>
 <html>
@@ -357,7 +357,7 @@ def delete_resource():
 @lab1.route('/lab1/resource')
 def resource_status():
     status_message = "ресурс создан" if resource_exists else "ресурс ещё не создан"
-    img_path = url_for("static", filename="painter.png")
+    img_path = url_for("static", filename="lab1/painter.png")
     return f'''
     <!DOCTYPE html>
     <html>
