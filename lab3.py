@@ -101,7 +101,7 @@ def settings():
 
 @lab3.route('/lab3/ticket_form')
 def ticket_form():
-    return render_template('/lab3/ticket_form.html')
+    return render_template('lab3/ticket_form.html')
 
 
 @lab3.route('/lab3/generate_ticket')
@@ -150,3 +150,46 @@ def generate_ticket():
     )
 
 
+# Доп задание. Поиск товаров по заданному диапазону цен.
+books = [
+    {"name": "1984", "price": 500, "author": "Джордж Оруэлл", "genre": "Научная фантастика"},
+    {"name": "Мастер и Маргарита", "price": 600, "author": "Михаил Булгаков", "genre": "Роман"},
+    {"name": "Убить пересмешника", "price": 550, "author": "Харпер Ли", "genre": "Роман"},
+    {"name": "Война и мир", "price": 700, "author": "Лев Толстой", "genre": "Роман"},
+    {"name": "Гарри Поттер и философский камень", "price": 450, "author": "Дж.К. Роулинг", "genre": "Фэнтези"},
+    {"name": "Над пропастью во ржи", "price": 400, "author": "Джером Д. Сэлинджер", "genre": "Роман"},
+    {"name": "Анна Каренина", "price": 800, "author": "Лев Толстой", "genre": "Роман"},
+    {"name": "Степной волк", "price": 500, "author": "Герман Гессе", "genre": "Роман"},
+    {"name": "Однажды в Америке", "price": 300, "author": "Донат Филе", "genre": "Роман"},
+    {"name": "Маленький принц", "price": 350, "author": "Антуан де Сент-Экзюпери", "genre": "Детская литература"},
+    {"name": "Дело Тёмных Лесов", "price": 650, "author": "Мария Ладо", "genre": "Фэнтези"},
+    {"name": "Идиот", "price": 700, "author": "Федор Достоевский", "genre": "Роман"},
+    {"name": "Норвегия" , "price": 750, "author": "Стивен Кинг", "genre": "Ужасы"},
+    {"name": "Сказки старого Вильнюса", "price": 380, "author": "Кирилл Нерсесов", "genre": "Сказки"},
+    {"name": "Тихий Дон", "price": 680, "author": "Михаил Шолохов", "genre": "Роман"},
+    {"name": "Зулейха открывает глаза", "price": 500, "author": "Гузель Яхина", "genre": "Роман"},
+    {"name": "Лето в Польше" , "price": 420, "author": "Людмила Улицкая", "genre": "Роман"},
+    {"name": "Собеседник", "price": 300, "author": "Лев Шестов", "genre": "Философия"},
+    {"name": "Лотерейный билет", "price": 330, "author": "Кристиан Бобин", "genre": "Роман"},
+    {"name": "Снегурочка", "price": 550, "author": "Александр Островский", "genre": "Драма"},
+    {"name": "Десять негритят", "price": 630, "author": "Агата Кристи", "genre": "Криминал"},
+    {"name": "Сто лет одиночества", "price": 720, "author": "Габриэль Гарсиа Маркес", "genre": "Роман"},
+]
+
+@lab3.route('/lab3/products')
+def products():
+    return render_template('lab3/search_form.html')
+
+
+@lab3.route('/lab3/filter_products')
+def filter_products():
+    min_price = request.args.get('min_price', type=int)
+    max_price = request.args.get('max_price', type=int)
+
+    filtered_books = [
+        book for book in books 
+        if (min_price is None or book['price'] >= min_price) and 
+        (max_price is None or book['price'] <= max_price)
+        ]
+    
+    return render_template('lab3/resultfiltr.html', books=filtered_books, min_price=min_price, max_price=max_price)

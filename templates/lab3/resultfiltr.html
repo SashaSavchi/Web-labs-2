@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{% block main %}
+    <h1>Результаты поиска</h1>
+    <p>Книги в диапазоне от {{ min_price }} до {{ max_price }}:</p>
+    <ul>
+        {% if books %}
+            {% for book in books %}
+                <li>{{ book.name }} - {{ book.price }} руб. (Автор: {{ book.author }}, Жанр: {{ book.genre }})</li>
+            {% endfor %}
+        {% else %}
+            <li>Нет книг в указанном диапазоне цен.</li>
+        {% endif %}
+    </ul>
+    <a href="/lab3/products">Вернуться на главную</a>
+{% endblock %}
