@@ -15,7 +15,7 @@ def cookie():
     resp = make_response(redirect('/lab3/'))
     resp.set_cookie('name', 'Alex', max_age = 5)
     resp.set_cookie('age', '20')
-    resp.set_cookie('name_color', 'magenta')
+    resp.set_cookie('name_color', 'magenta', max_age = 5)
     return resp
 
 
@@ -48,6 +48,7 @@ def form1():
 def order():
     return render_template('lab3/order.html')
 
+
 price = 0 
 @lab3.route('/lab3/pay')
 def pay():
@@ -66,6 +67,7 @@ def pay():
         price += 10
         
     return render_template('lab3/pay.html', price=price)
+
 
 @lab3.route('/lab3/success')
 def success():
@@ -95,3 +97,56 @@ def settings():
         return resp
 
     return render_template('lab3/settings.html', bcolor=request.cookies.get('bcolor'), color=request.cookies.get('color'), font_size=request.cookies.get('font_size'), font_family=request.cookies.get('font_family'))
+
+
+@lab3.route('/lab3/ticket_form')
+def ticket_form():
+    return render_template('/lab3/ticket_form.html')
+
+
+@lab3.route('/lab3/generate_ticket')
+def generate_ticket():
+    name = request.args.get('name')
+    berth = request.args.get('berth')
+    bed = 'bed' in request.args
+    luggage = 'luggage' in request.args
+    age = int(request.args.get('age', 0))
+    departure = request.args.get('departure')
+    destination = request.args.get('destination')
+    date = request.args.get('date')
+    insurance = 'insurance' in request.args
+
+    # Расчёт стоимости билета
+    if age < 18:
+        ticket_type = "Детский билет"
+        price = 700
+    else:
+        ticket_type = "Взрослый билет"
+        price = 1000
+
+    # Доплаты в зависимости от выбранных опций
+    if berth in ['lower', 'lower_side']:
+        price += 100
+    if bed:
+        price += 75
+    if luggage:
+        price += 250
+    if insurance:
+        price += 150
+
+    return render_template(
+        '/lab3/ticket.html',
+        name=name,
+        berth=berth,
+        age=age,
+        luggage=luggage,
+        bed=bed,
+        departure=departure,
+        destination=destination,
+        date=date,
+        insurance=insurance,
+        ticket_type=ticket_type,
+        total_price=price
+    )
+
+

@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{% block main %}
+
+<h1 style="text-align: center;">Форма железнодорожного билета</h1>
+    <form action="/lab3/generate_ticket">
+        <div class="form-container">
+            <div class="form-field">
+                <label for="name">ФИО пассажира:</label>
+                <input type="text" placeholder="ФИО как в паспорте" id="name" name="name" required>
+            </div>
+            <div class="form-field">
+                <label>Полка:</label>
+                <select name="berth" required>
+                    <option value="lower">Нижняя +100&#8381;</option>
+                    <option value="upper">Верхняя</option>
+                    <option value="upper_side">Верхняя боковая</option>
+                    <option value="lower_side">Нижняя боковая +100&#8381;</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label>С бельём: +75&#8381;</label>
+                <input type="checkbox" name="bed">
+            </div>
+            <div class="form-field">
+                <label>С багажом: +250&#8381;</label>
+                <input type="checkbox" name="luggage">
+            </div>
+            <div class="form-field">
+                <label>Возраст:</label>
+                <input type="number" name="age" min="1" max="120" required>
+            </div>
+            <div class="form-field">
+                <label>Пункт выезда:</label>
+                <input type="text" name="departure" required>
+            </div>
+            <div class="form-field">
+                <label>Пункт назначения:</label>
+                <input type="text" name="destination" required>
+            </div>
+            <div class="form-field">
+                <label>Дата поездки:</label>
+                <input type="date" name="date" id="date" required>
+            </div>
+            <div class="form-field">
+                <label>Страховка: +150&#8381;</label>
+                <input type="checkbox" name="insurance">
+            </div>
+            <div class="form-field">
+                <button type="submit">Сформировать билет</button>
+            </div>
+        </div>
+    </form>
+
+
+<script>
+    const today = new Date().toISOString().split("T")[0];
+    document.getElementById("date").setAttribute("min", today);
+</script>
+
+<style>
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 2px solid #ddd;
+        padding: 20px;
+        width: 300px;
+        margin: 0 auto;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+    .form-field {
+        margin-bottom: 15px;
+        text-align: left;
+        width: 95%;
+    }
+    label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    input, select, button {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    button {
+        background-color: darkgreen;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+</style>
+{% endblock %}

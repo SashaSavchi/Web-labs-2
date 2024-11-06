@@ -21,7 +21,7 @@
     <form>
         <label>Ваше имя:</label>
         <div>
-            <input type="text" placeholder="Как Вас зовут?" name="user" value="{{ user or 'Неизвестный' }}">
+            <input type="text" placeholder="Как Вас зовут?" name="user" value="{{ user or '' }}">
             <span class="error">{{ errors.user }}</span>
         <div>
 
