@@ -99,18 +99,20 @@ def st():
     result = x1 ** x2
     return render_template('lab4/calc/st.html', x1=x1, x2=x2, result=result)
 
+
+max_trees = 4
 tree_count = 0
-@lab4.route('/lab4/tree', methods = ['GET', 'POST'])
+@lab4.route('/lab4/tree', methods=['GET', 'POST'])
 def tree():
     global tree_count
     if request.method == 'GET':
-        return render_template('lab4/tree.html', tree_count=tree_count)
+        return render_template('lab4/tree.html', tree_count=tree_count, max_trees=max_trees)
     
     operation = request.form.get('operation')
 
-    if operation == 'cut':
+    if operation == 'cut' and tree_count > 0:
         tree_count -= 1
-    elif operation == 'plant':
+    elif operation == 'plant' and tree_count < max_trees:
         tree_count += 1
     
     return redirect('/lab4/tree')
