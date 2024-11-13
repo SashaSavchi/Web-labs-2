@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block lab %}Лабораторная работа 4{% endblock %}
+
+{% block main %}
+    <h1>Заказ зерна</h1>
+    <form method="post">
+        <label for="grain_type">Выберите вид зерна:</label>
+        <select id="grain_type" name="grain_type" required>
+            <option value=""></option>
+            {% for grain, price in grain_prices.items() %}
+                <option value="{{ grain }}">{{ grain }} ({{ price }} руб/т)</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        
+        <label for="weight">Вес (т):</label>
+        <input type="number" id="weight" name="weight" step="0.1" required>
+        <br><br>
+
+        <button type="submit">Сформировать заказ</button>
+    </form>
+    
+    {% if message %}
+        <div style="margin-top: 20px; color: green;">
+            <p><b>{{ message }}</b></p>
+            {% if discount_message %}
+                <p style="color: blue;">{{ discount_message }}</p>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}
