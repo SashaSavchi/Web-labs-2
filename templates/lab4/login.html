@@ -7,7 +7,11 @@
         <h1>Добро пожаловать, {{ name }}!</h1>
         <div>
             <form action="/lab4/logout" method="post">
-                <button>Выход</button>
+                <button>Завершить сеанс</button>
+                <br>
+                <div>
+                    <a href="/lab4">Вернуться в меню</a>
+                </div>
             </form>
         </div>
     {% else %}
@@ -25,9 +29,10 @@
             <div style="color: red; font-weight: bold;">
                 {{ error }}
             </div>
-            <div> 
+            <div>
                 <button type="submit">Войти</button>
-                <button type="reset">Отмена</button>
+                <a href="/lab4/register"><button type="button">Зарегистрироваться</button></a>
+                <button type="reset">Сброс</button>
             </div>
         </form>
     {% endif %}
