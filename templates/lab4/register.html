@@ -8,23 +8,26 @@
         <p>Чтобы зарегистрировать нового пользователя, нужно выйти из своего аккаунта.</p>
         <form action="/lab4/logout" method="post">
             <button>Завершить сеанс</button>
+            <div>
+                <a href="/lab4">Вернуться в меню</a>
+            </div>
         </form>
     {% else %}
         <h1>Регистрация</h1>
         <form method="post">
-            <div>
+            <div style="margin-bottom: 10px;">
                 <label for="login">Логин:</label>
                 <input type="text" id="login" name="login" required>
             </div>
-            <div>
+            <div style="margin-bottom: 10px;">
                 <label for="password">Пароль:</label>
                 <input type="password" id="password" name="password" required>
             </div>
-            <div>
+            <div style="margin-bottom: 10px;">
                 <label for="name">Имя:</label>
                 <input type="text" id="name" name="name" required>
             </div>
-            <div>
+            <div style="margin-bottom: 10px;">
                 <label for="gender">Пол:</label>
                 <select id="gender" name="gender" required>
                     <option value="мужской">Мужской</option>
@@ -34,9 +37,12 @@
             <div style="color: red; font-weight: bold;">
                 {{ error }}
             </div>
-            <div>
+            <div style="margin-bottom: 10px;">
                 <button type="submit">Зарегистрироваться</button>
                 <button type="reset">Сброс</button>
+            </div>
+            <div>
+                <a href="/lab4">Вернуться в меню</a>
             </div>
         </form>
     {% endif %}

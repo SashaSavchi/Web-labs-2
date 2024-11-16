@@ -129,7 +129,7 @@ def initialize_users():
         ]
 
 
-@lab4.route('/lab4/login', methods = ['GET', 'POST'])
+@lab4.route('/lab4/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
         if 'login' in session:
@@ -142,15 +142,15 @@ def login():
             name = ''
         return render_template('lab4/login.html', authorized=authorized, login=login, name=name)
     
-    login = request.form.get('login')
+    login = request.form.get('login')  # Сохраняем введённый логин
     password = request.form.get('password')
 
     if not login:
         error = 'Не введён логин'
-        return render_template('lab4/login.html', error=error, authorized=False, login_value=login)
+        return render_template('lab4/login.html', error=error, authorized=False, login=login)
     if not password:
         error = 'Не введён пароль'
-        return render_template('lab4/login.html', error=error, authorized=False, login_value=login)
+        return render_template('lab4/login.html', error=error, authorized=False, login=login)
     
     for user in session['users']:
         if login == user['login'] and password == user['password']:
@@ -159,7 +159,8 @@ def login():
             return redirect('/lab4/login')
         
     error = 'Неверный логин и/или пароль'
-    return render_template('lab4/login.html', error=error, authorized=False)
+    return render_template('lab4/login.html', error=error, authorized=False, login=login)
+
 
 
 @lab4.route('/lab4/logout', methods = ['POST'])
@@ -194,7 +195,7 @@ def fridge():
                 message = f"Установлена температура: {temperature}°С"
                 snowflakes = 1
 
-    return render_template('lab4/fridge.html', message=message, snowflakes=snowflakes)
+    return render_template('lab4/fridge.html', message=message, snowflakes=snowflakes, temperature=temperature)
 
 
 @lab4.route('/lab4/order_grain', methods=['GET', 'POST'])
@@ -247,14 +248,6 @@ def register():
         name = request.form.get('name')
         gender = request.form.get('gender')
 
-        if 'users' not in session:
-            session['users'] = [
-                {'login': 'alex', 'password': '123', 'name': 'Александр Иванов', 'gender': 'мужской'},
-                {'login': 'bob', 'password': '555', 'name': 'Борис Смирнов', 'gender': 'мужской'},
-                {'login': 'sam', 'password': '007', 'name': 'Саманта Цербер', 'gender': 'женский'},
-                {'login': 'yan', 'password': '213', 'name': 'Яна Кузнецова', 'gender': 'женский'},
-            ]
-
         for user in session['users']:
             if user['login'] == login:
                 error = "Логин уже используется."
@@ -269,7 +262,6 @@ def register():
         })
 
         return redirect('/lab4/login')
-
     # Если метод GET, показываем форму регистрации
     return render_template('lab4/register.html', authorized=False)
 
@@ -278,18 +270,14 @@ def register():
 def users_list():
     if 'login' not in session:
         return redirect('/lab4/login')
-
     return render_template('lab4/users_list.html', users=session.get('users', []), current_login=session['login'])
 
 
 @lab4.route('/lab4/delete_user', methods=['POST'])
 def delete_user():
-    current_login = session['login']
-
     # Удаляем пользователя из списка
     session.modified = True
-    session['users'] = [user for user in session['users'] if user['login'] != current_login]
-
+    session['users'] = [user for user in session['users'] if user['login'] != session['login']]
     # Удаляем сессию пользователя
     session.pop('login', None)
     session.pop('name', None)
@@ -299,13 +287,9 @@ def delete_user():
 
 @lab4.route('/lab4/edit_user', methods=['GET', 'POST'])
 def edit_user():
-    current_login = session['login']
-    users = session['users']
-
     # Найти текущего пользователя
-    user = next((u for u in users if u['login'] == current_login), None)
-
-    error = None
+    user = next((u for u in session['users'] if u['login'] == session['login']), None)
+    error = ''
 
     if request.method == 'POST':
         old_password = request.form.get('old_password')
@@ -325,7 +309,6 @@ def edit_user():
 
             logout()
             return redirect('/lab4/users')
-
     return render_template('lab4/edit_user.html', user=user, error=error)
 
 

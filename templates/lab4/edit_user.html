@@ -5,22 +5,22 @@
 {% block main %}
     <h1>Редактировать профиль</h1>
     <form method="post">
-        <div>
+        <div style="margin-bottom: 10px;">
             <label for="old_password">Текущий пароль:</label>
             <input type="password" id="old_password" name="old_password" required>
         </div>
         <div style="color: red; font-weight: bold;">
             {{ error }}
         </div>
-        <div>
+        <div style="margin-bottom: 10px;">
             <label for="name">Новое имя:</label>
             <input type="text" id="name" name="name" value="{{ user.name }}" placeholder="Введите новое имя">
         </div>
-        <div>
+        <div style="margin-bottom: 10px;">
             <label for="password">Новый пароль:</label>
             <input type="password" id="password" name="password" placeholder="Введите новый пароль">
         </div>
-        <div>
+        <div style="margin-bottom: 10px;">
             <button type="submit">Сохранить изменения</button>
             <a href="/lab4/users"><button type="button">Отмена</button></a>
         </div>
