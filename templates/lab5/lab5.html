@@ -76,7 +76,11 @@
             <a href="/lab5/create">Создать статью</a>
         </div>
         <div class="footer-right">
-            {{ name if name else 'Anonymous' }}
+            {% if login %}
+                {{ login }} 
+            {% else %}
+                Anonymous
+            {% endif %}
         </div>
     </footer>
 </body>

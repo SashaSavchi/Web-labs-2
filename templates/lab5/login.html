@@ -3,8 +3,8 @@
 {% block lab %}Лабораторная работа 5{% endblock %}
 
 {% block main %}
-    <h1>Регистрация</h1>
-    <form action="/lab5/register" method="post">
+    <h1>Вход в систему</h1>
+    <form action="/lab5/login" method="post">
         <div style="margin-bottom: 10px;">
             <label>
                 Логин: <input type="test" name="login"> 
@@ -19,7 +19,7 @@
         <div style="color: red; font-weight: bold;">
             {{ error }}
         </div>
-        <button type="submit">Зарегистрироваться</button>
+        <button type="submit">Вход</button>
     </form>
 {% endblock %}
 

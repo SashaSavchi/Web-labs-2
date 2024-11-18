@@ -142,7 +142,7 @@ def login():
             name = ''
         return render_template('lab4/login.html', authorized=authorized, login=login, name=name)
     
-    login = request.form.get('login')  # Сохраняем введённый логин
+    login = request.form.get('login') 
     password = request.form.get('password')
 
     if not login:
