@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request, session 
+from flask import Blueprint, redirect, render_template, request, session, current_app 
 lab5 = Blueprint('lab5',__name__)
 import psycopg2 
 from psycopg2.extras import RealDictCursor 
