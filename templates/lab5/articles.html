@@ -5,10 +5,42 @@
 {% block main %}
     <h1>Статьи</h1>
 
-    {% for articale in articles %}
-        <h2>{{ articale['title'] }}</h2>
-        <blockquote>{{ articale['article_text'] }}</blockquote>
+    {% if articles %}
+    <h2 style="color: maroon">Любимые статьи</h2>
+    {% for article in articles if article['is_favorite'] %}
+        <div style="margin-bottom: 20px;">
+            <h3>{{ article['title'] }}</h3>
+            <blockquote>{{ article['article_text'] }}</blockquote>
+            <form method="post" action="/lab5/favorite/{{ article['id'] }}" style="display: inline;">
+                <button type="submit">Удалить из любимого</button>
+            </form>
+            <form method="get" action="/lab5/edit/{{ article['id'] }}" style="display: inline;">
+                <button type="submit">Редактировать</button>
+            </form>
+            <form method="post" action="/lab5/delete/{{ article['id'] }}" style="display: inline;">
+                <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить статью?');">Удалить</button>
+            </form>
+        </div>
     {% endfor %}
+    
+    <h2 style="color: maroon">Все статьи</h2>
+    {% for article in articles if not article['is_favorite'] %}
+        <div style="margin-bottom: 20px;">
+            <h3>{{ article['title'] }}</h3>
+            <blockquote>{{ article['article_text'] }}</blockquote>
+            <form method="post" action="/lab5/favorite/{{ article['id'] }}" style="display: inline;">
+                <button type="submit">Добавить в любимое</button>
+            </form>         
+            <form method="get" action="/lab5/edit/{{ article['id'] }}" style="display: inline;">
+                <button type="submit">Редактировать</button>
+            </form>
+            <form method="post" action="/lab5/delete/{{ article['id'] }}" style="display: inline;">
+                <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить статью?');">Удалить</button>
+            </form>
+        </div>
+    {% endfor %}
+{% endif %}
+
 
     <div>
         <a href="/lab5">Вернуться в меню</a>

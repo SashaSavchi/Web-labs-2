@@ -3,26 +3,39 @@
 {% block lab %}Лабораторная работа 5{% endblock %}
 
 {% block main %}
-    <h1>Вход в систему</h1>
-    <form action="/lab5/login" method="post">
+    {% if authorized %}
+        <h1> {{ login }}! Вы в системе! </h1>
         <div style="margin-bottom: 10px;">
-            <label>
-                Логин: <input type="test" name="login"> 
-            </label>
+            <form action="/lab5/logout" method="post">
+                <button>Завершить сеанс</button>
+                <br>
+                <div>
+                    <a href="/lab5">Вернуться в меню</a>
+                </div>
+            </form>
         </div>
+    {% else %}
+        <h1>Вход в систему</h1>
+        <form action="/lab5/login" method="post">
+            <div style="margin-bottom: 10px;">
+                <label>
+                    Логин: <input type="test" name="login"> 
+                </label>
+            </div>
 
-        <div style="margin-bottom: 10px;">
-            <label>
-                Пароль: <input type="password" name="password"> 
-            </label>
-        </div>
-        <div style="color: red; font-weight: bold;">
-            {{ error }}
-        </div>
-        <button type="submit">Вход</button>
-        <div>
-            <a href="/lab5">Вернуться в меню</a>
-        </div>
-    </form>
+            <div style="margin-bottom: 10px;">
+                <label>
+                    Пароль: <input type="password" name="password"> 
+                </label>
+            </div>
+            <div style="color: red; font-weight: bold;">
+                {{ error }}
+            </div>
+            <button type="submit">Вход</button>
+            <div>
+                <a href="/lab5">Вернуться в меню</a>
+            </div>
+        </form>
+    {% endif %}
 {% endblock %}
 
