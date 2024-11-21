@@ -262,7 +262,6 @@ def register():
         })
 
         return redirect('/lab4/login')
-    # Если метод GET, показываем форму регистрации
     return render_template('lab4/register.html', authorized=False)
 
 
@@ -287,7 +286,6 @@ def delete_user():
 
 @lab4.route('/lab4/edit_user', methods=['GET', 'POST'])
 def edit_user():
-    # Найти текущего пользователя
     user = next((u for u in session['users'] if u['login'] == session['login']), None)
     error = ''
 
