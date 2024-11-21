@@ -26,14 +26,28 @@
                 const office = office_list[i];
                 const li = document.createElement('li');
                 li.innerText = `${office.number}: ${office.tenant || 'свободен'}`;
+
                 const bookingButton = document.createElement('button');
                 bookingButton.innerText = 'Зарезервировать';
                 bookingButton.onclick = function() {booking(office.number)};
+
+                const cancellationButton = document.createElement('button');
+                cancellationButton.innerText = 'Освободить';
+                cancellationButton.onclick = function() {cancellation(office.number)};
+
                 bookingButton.style.borderRadius = '10px'
+                bookingButton.style.border = '1px'
                 bookingButton.style.padding = '5px'
-                bookingButton.style.margin = '5px'
+                bookingButton.style.margin = '10px'
                 bookingButton.style.backgroundColor = 'rgb(230, 240, 248)'
+                cancellationButton.style.borderRadius = '10px'
+                cancellationButton.style.border = '1px'
+                cancellationButton.style.padding = '5px'
+                cancellationButton.style.margin = '5px'
+                cancellationButton.style.backgroundColor = 'rgb(220, 217, 248)'
+
                 li.appendChild(bookingButton);
+                li.appendChild(cancellationButton);
                 ul.appendChild(li);
             }
         });
@@ -77,11 +91,51 @@
     document.addEventListener('DOMContentLoaded', function() {
         getOfficeList();
     });
+    function cancellation(officeNumber) {
+        const url = '/lab6/json-rpc-api/';
+        const json = {
+            'jsonrpc': '2.0',
+            'method': 'cancellation',
+            'params': officeNumber,
+            'id': Math.round(Math.random()*1000)
+        };
+        fetch(url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(json)
+        })
+        .then(function(response) {
+            return response.json()
+        })
+        .then(function(data) {
+            if(data.error) {
+                switch(data.error.code) {
+                    case 1:
+                        alert('Вы не авторизованы, пожалуйста, авторизуйтесь');
+                        break;
+                    case 3:
+                        alert('Офис не арендован');
+                        break;
+                    case 4:
+                        alert('Вы не можете снять чужую аренду');
+                        break;
+                    case -32601:
+                        alert('Странная ошибка');
+                        break;
+                }
+            }
+            else {
+                document.getElementById('office-list').innerHTML = '';
+                getOfficeList();
+            }
+        });
+    }
+
 </script>
 {% endblock %}
 
 {% block main %}
     <h1>Список кабинетов</h1>
     <ul id="office-list"></ul>
-    
+
 {% endblock %}
