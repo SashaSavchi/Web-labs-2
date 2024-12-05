@@ -26,7 +26,7 @@
             for (let i = 0; i < office_list.length; i++) {
                 const office = office_list[i];
                 const li = document.createElement('li');
-                li.innerText = `${office.number}: ${office.tenant || 'свободен'} | Стоимость аренды: ${office.price} ₽`;
+                li.innerText = `Офис №${office.number}: ${office.tenant || 'свободен'} | Стоимость аренды: ${office.price} ₽`;
 
                 const bookingButton = document.createElement('button');
                 bookingButton.innerText = 'Зарезервировать';
@@ -42,6 +42,7 @@
                 li.appendChild(bookingButton);
                 li.appendChild(cancellationButton);
                 ul.appendChild(li);
+
 
                 const currentLogin = "{{ session.get('login') }}"; 
                 if (office.tenant === currentLogin) {
