@@ -8,7 +8,7 @@ def lab():
 
 films = [
     {
-        "title": "Sen to Chihiro no kamikakush",
+        "title": "Howl no Ugoku Shiro",
         "title_ru": "Ходячий замок",
         "year": 2004,
         "description": "Злая ведьма заточила 18-летнюю Софи в тело старухи. \

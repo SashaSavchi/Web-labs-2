@@ -4,6 +4,24 @@
 
 {% block script %}
 <script src="{{ url_for('static', filename='lab7/main.js') }}"></script>
+
+<style>
+    .modal {
+        display: none;
+        z-index: 100;
+        box-shadow: 4px 4px 10px rgba(75, 75, 75, 0.568);
+        color: aliceblue;
+        background-color: maroon;
+        width: 500px;
+        left: 50%;
+        top: 220px;
+        margin-left: -200px;
+        position: absolute;
+        padding: 30px;
+        line-height: 30px;
+        border-radius: 20px;
+    }
+</style>    
 {% endblock %}
 
 {% block main %}
@@ -26,6 +44,33 @@
 
     <div>
         <button onclick="addFilm()">Добавить фильм</button>
+    </div>
+
+    <div class="modal">
+        <input type="hidden" id="id">
+        <label>
+            Название фильма на русском языке:<br>
+            <input type="text" id="title-ru">
+        </label><br>
+
+        <label>
+            Название фильма на оригинальном языке:<br>
+            <i>(если фильм русский, то оставьте поле пустым)</i><br>
+            <input type="text" id="title">
+        </label><br>
+
+        <label>
+            Год выпуска:<br>
+            <input type="number" id="year">
+        </label><br>
+
+        <label>
+            Описание:<br>
+            <textarea id="description"></textarea>
+        </label><br>
+
+        <button onclick="sendFilm()">ОК</button>
+        <button onclick="cancel()">Отмена</button>
     </div>
 
 {% endblock %}
