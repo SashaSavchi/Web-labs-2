@@ -9,12 +9,12 @@ function fillFilmList() {
         for(let i = 0; i<films.length; i++) {
             let tr = document.createElement('tr');
 
-            let tdTitle = document.createElement('td');
             let tdTitleRus = document.createElement('td');
+            let tdTitle = document.createElement('td');
             let tdYear = document.createElement('td');
             let tdActions = document.createElement('td');
 
-            tdTitle.innerText = films[i].title == films[i].title_ru ? '' : films[i].title;
+            tdTitle.innerHTML = films[i].title == films[i].title_ru ? '' : `<i>(${films[i].title})</i>`;
             tdTitleRus.innerText = films[i].title_ru;
             tdYear.innerText = films[i].year;
 
@@ -33,11 +33,10 @@ function fillFilmList() {
             tdActions.append(editButton);
             tdActions.append(delButton);
 
-            tr.append(tdTitle);
             tr.append(tdTitleRus);
+            tr.append(tdTitle);
             tr.append(tdYear);
             tr.append(tdActions);
-
             tbody.append(tr);
         }
     })
@@ -63,6 +62,7 @@ function sendFilm() {
         description: document.getElementById('description').value
     }
 
+
     const url = `/lab7/rest-api/films/${id}`;
     const method = id === '' ? 'POST' : 'PUT';
 
@@ -79,9 +79,11 @@ function sendFilm() {
         }
         return resp.json();
     })
-    then(function(errors){
-        if(errors.description)
-            document.getElementById('description-error').innerText = errors.description;
+    .then(function(errors){
+        document.getElementById('year-error').innerText = errors.year || '';
+        document.getElementById('description-error').innerText = errors.description || '';
+        document.getElementById('titleru-error').innerText = errors.title_ru || '';
+        document.getElementById('title-error').innerText = errors.title || '';
     });
 }
 
@@ -103,7 +105,9 @@ function editFilm(id) {
 function showModal() {
     document.querySelector('div.modal').style.display = 'block';
     document.getElementById('description-error').innerText = '';
-}
+    document.getElementById('titleru-error').innerText = '';
+    document.getElementById('title-error').innerText = '';
+    document.getElementById('year-error').innerText = '';}
 
 function hideModal() {
     document.querySelector('div.modal').style.display = 'none';

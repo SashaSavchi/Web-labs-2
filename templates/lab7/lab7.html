@@ -21,19 +21,19 @@
         line-height: 30px;
         border-radius: 20px;
     }
-    .error-message {
+    .error {
         color: RED;
     }
     button {
         border: 2px solid rgb(217, 228, 248);
         padding: 6px 12px; 
         margin: 5px;
-        border-radius: 7px;
+        border-radius: 20px;
         background-color: maroon;
         color: white; 
         cursor: pointer; 
         transition: background-color 0.3s;  
-
+    }
     button:hover {
         background-color: rgba(208, 155, 155, 0.725);  
     }
@@ -67,23 +67,26 @@
         <label>
             Название фильма на русском языке:<br>
             <input type="text" id="title-ru">
+            <span class="error" id="titleru-error"></span>
         </label><br>
 
         <label>
             Название фильма на оригинальном языке:<br>
             <i>(если фильм русский, то оставьте поле пустым)</i><br>
             <input type="text" id="title">
+            <span class="error" id="title-error"></span>
         </label><br>
 
         <label>
             Год выпуска:<br>
             <input type="number" id="year">
+            <span class="error" id="year-error"></span>
         </label><br>
 
         <label>
             Описание:<br>
             <textarea id="description"></textarea>
-            <div id="description-error" class="error-message"></div>
+            <div id="description-error" class="error"></div>
         </label><br>
 
         <button onclick="sendFilm()">ОК</button>

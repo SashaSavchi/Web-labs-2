@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, render_template, request, session, current_app 
+from datetime import datetime
 
 lab7 = Blueprint('lab7',__name__)
 
@@ -8,8 +9,8 @@ def lab():
 
 films = [
     {
-        "title": "Howl no Ugoku Shiro",
         "title_ru": "Ходячий замок",
+        "title": "Howl no Ugoku Shiro",
         "year": 2004,
         "description": "Злая ведьма заточила 18-летнюю Софи в тело старухи. \
             Девушка-бабушка бежит из города куда глаза глядят и встречает удивительный \
@@ -18,8 +19,8 @@ films = [
             Девушка и демон решают помочь друг другу избавиться от злых чар."
     },
     {
-        "title": "The Gentlemen",
         "title_ru": "Джентльмены",
+        "title": "The Gentlemen",
         "year": 2019,
         "description": "Один ушлый американец ещё со студенческих лет \
             приторговывал наркотиками, а теперь придумал схему нелегального \
@@ -32,8 +33,8 @@ films = [
             чернокожих спортсменов и даже русского олигарха."
     },
     {
-        "title": "Shrek",
         "title_ru": "Шрэк",
+        "title": "Shrek",
         "year": 2001,
         "description": "Жил да был в сказочном государстве большой зеленый великан \
         по имени Шрэк. Жил он в гордом одиночестве в лесу, на болоте, которое считал \
@@ -44,8 +45,8 @@ films = [
         которая томится в неприступной башне, охраняемой огнедышащим драконом."
     },
     {
-        "title": "Intouchables",
         "title_ru": "1+1",
+        "title": "Intouchables",
         "year": 2011,
         "description": "Пострадав в результате несчастного случая, \
             богатый аристократ Филипп нанимает в помощники человека, \
@@ -56,8 +57,8 @@ films = [
             размеренную жизнь аристократа дух приключений."
     },
     {
-        "title": "Pirates of the Caribbean",
         "title_ru": "Пираты Карибского моря",
+        "title": "Pirates of the Caribbean",
         "year": 2006,
         "description": "Вновь оказавшись в ирреальном мире, лихой \
             капитан Джек Воробей неожиданно узнает, что является \
@@ -73,7 +74,7 @@ films = [
 
 @lab7.route('/lab7/rest-api/films/', methods=['GET'])
 def get_films():
-    return jsonify(films)
+    return films
 
 
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['GET'])
@@ -96,8 +97,18 @@ def put_film(id):
     if id < 0 or id >= len(films):
         return {"error": "Film not found"}, 404
     film = request.get_json()
+    if film['title_ru'] == '':
+        return {'title_ru': 'Укажите русское название'}, 400
+    if film['year'] == '':
+        return {'year': 'Укажите год'}, 400
+    current_year = datetime.now().year
+    year = int(film['year'])
+    if year < 1895 or year > current_year:
+        return {'year': f'Год должен быть от 1895 до {current_year}'}, 400
     if film['description'] == '':
         return {'description': 'Заполните описание'}, 400
+    if film['title'] == '':
+        film['title'] = film['title_ru']
     films[id] = film
     return films[id]
 
@@ -105,8 +116,23 @@ def put_film(id):
 @lab7.route('/lab7/rest-api/films/', methods=['POST'])
 def add_film():
     film = request.get_json()
+    if film['title'] == '' and film['title_ru'] == '':
+        return {'title': 'Укажите оригинальное название'}, 400
+    if film['title_ru'] == '':
+        return {'title_ru': 'Укажите русское название'}, 400
+    if film['year'] == '':
+        return {'year': 'Укажите год'}, 400
+    current_year = datetime.now().year
+    year = int(film['year'])
+    if year < 1895 or year > current_year:
+        return {'year': f'Год должен быть от 1895 до {current_year}'}, 400
     if film['description'] == '':
         return {'description': 'Заполните описание'}, 400
+    description = film.get('description', '')
+    if len(description) > 2000:
+        return {'description': 'Описание превышает 2000 символов'}, 400
+    if film['title'] == '':
+        film['title'] = film['title_ru']
     films.append(film)
     id = {'id': len(films) - 1}
     return id
