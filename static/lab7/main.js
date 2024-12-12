@@ -6,7 +6,7 @@ function fillFilmList() {
     .then(function (films) {
         let tbody = document.getElementById('film-list');
         tbody.innerHTML = '';
-        for(let i = 0; i<films.length; i++) {
+        for(let i = 0; i < films.length; i++) {
             let tr = document.createElement('tr');
 
             let tdTitleRus = document.createElement('td');
@@ -21,13 +21,13 @@ function fillFilmList() {
             let editButton = document.createElement('button');
             editButton.innerText = 'Редактировать';
             editButton.onclick = function() {
-                editFilm(i, films[i].title_ru);
+                editFilm(films[i].id);  // Изменение здесь
             }
 
             let delButton = document.createElement('button');
             delButton.innerText = 'Удалить';
             delButton.onclick = function() {
-                deleteFilm(i, films[i].title_ru);
+                deleteFilm(films[i].id, films[i].title_ru);
             }
 
             tdActions.append(editButton);
@@ -41,6 +41,7 @@ function fillFilmList() {
         }
     })
 }
+
 
 
 function deleteFilm(id, title) {
@@ -87,13 +88,13 @@ function sendFilm() {
     });
 }
 
-function editFilm(id) {
-    fetch(`/lab7/rest-api/films/${id}`)
+function editFilm(filmId) {
+    fetch(`/lab7/rest-api/films/${filmId}`)
     .then(function (data) {
         return data.json();
     })
     .then(function (film) {
-        document.getElementById('id').value = id;
+        document.getElementById('id').value = filmId;
         document.getElementById('title').value = film.title;
         document.getElementById('title-ru').value = film.title_ru;
         document.getElementById('year').value = film.year;
