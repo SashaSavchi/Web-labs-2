@@ -28,6 +28,11 @@
             display: flex;
             align-items: center;
             padding: 10px;
+            transition: background-color 0.2s ease;
+        }
+
+        footer:hover {
+            background-color: rgb(80, 18, 18);
         }
 
         .footer-center {
@@ -42,17 +47,18 @@
             padding: 10px 15px;
             text-align: center;
             color: white;
-            background-color: darkgreen;
+            background-color: rgb(93, 22, 174);
             border-radius: 5px;
-            font-size: 14px;
+            font-size: 18px;
         }
 
         .footer-center a:hover {
-            background-color: green;
+            background-color: rgb(165, 81, 213);
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.641);
         }
 
         .footer-right {
-            font-size: 14px;
+            font-size: 18px;
             text-align: right;
         }
     </style>
@@ -63,9 +69,12 @@
         WEB-программирование, часть 2. Лабораторная работа 8
     </header>
     <main>
+        {% if request.path == '/lab8/' %}
         <h1>База знаний</h1>
-        <div>
-        </div>
+        {% endif %}
+        {% block main %}
+        {{ main_content|safe }}
+        {% endblock %}
     </main>
     <footer>
         <div class="footer-center">
