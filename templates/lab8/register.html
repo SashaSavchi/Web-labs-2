@@ -3,11 +3,21 @@
 {% block lab %}Лабораторная работа 8{% endblock %}
 
 {% block main %}
+    {% if current_user.is_authenticated %}
+        <h1>Привет, {{ current_user.login }}!</h1>
+        <p>Чтобы зарегистрировать нового пользователя, нужно выйти из своего аккаунта.</p>
+        <form action="/lab8/logout">
+            <button>Завершить сеанс</button>
+            <div>
+                <a href="/lab8">Вернуться в меню</a>
+            </div>
+        </form>
+    {% else %}
     <h1>Регистрация</h1>
     <form action="/lab8/register" method="post">
         <div style="margin-bottom: 10px;">
             <label>
-                Логин: <input type="test" name="login" value="{{ login | default('') }}> 
+                Логин: <input type="test" name="login" value="{{ login | default('') }}"> 
             </label>
         </div>
 
@@ -24,4 +34,5 @@
             <a href="/lab8">Вернуться в меню</a>
         </div>
     </form>
+    {% endif %}
 {% endblock %}

@@ -3,6 +3,18 @@
 {% block lab %} Лабораторная работа 8{% endblock %}
 
 {% block main %}
+    {% if current_user.is_authenticated %}
+        <h1> {{ current_user.login }} ! Вы в системе! </h1>
+        <div style="margin-bottom: 10px;">
+            <form action="/lab8/logout">
+                <button>Завершить сеанс</button>
+                <br>
+                <div>
+                    <a href="/lab8">Вернуться в меню</a>
+                </div>
+            </form>
+        </div>
+    {% else %}
     <h1>Вход в систему</h1>
     <form action="/lab8/login" method="post">
         <div style="margin-bottom: 10px;">
@@ -24,4 +36,5 @@
             <a href="/lab8">Вернуться в меню</a>
         </div>
     </form>
+    {% endif %}
 {% endblock %}
