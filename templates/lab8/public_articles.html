@@ -1,0 +1,20 @@
+{% extends "lab8/lab8.html" %}
+
+{% block lab %} Лабораторная работа 8{% endblock %}
+
+{% block main %}
+    <h1>Публичные статьи</h1>
+
+    {% if articles %}
+        {% for article in articles %}
+            <h2 class="public">{{ article.title }}</h2>
+            <blockquote>{{ article.article_text }}</blockquote>
+        {% endfor %}
+    {% else %}
+        <div style="color: red; font-weight: bold;">Нет публичных статей</div>
+    {% endif %}
+
+    <div>
+        <a href="/lab8">Вернуться в меню</a>
+    </div>
+{% endblock %}

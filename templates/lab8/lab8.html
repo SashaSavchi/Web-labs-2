@@ -28,7 +28,7 @@
             display: flex;
             align-items: center;
             padding: 10px;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.2s;
         }
 
         footer:hover {
@@ -60,7 +60,22 @@
         .footer-right {
             font-size: 18px;
             text-align: right;
+            margin-left: 10px;
         }
+        button {
+            background-color: rgb(93, 22, 174);
+            color:aliceblue;
+            font-size: 18px;
+            border-radius: 5px;
+            border: 0;
+            padding: 10px 15px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        button:hover {
+            background-color: rgb(165, 81, 213);
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.641);
+        }
+
     </style>
 </head>
 <body>
@@ -80,8 +95,12 @@
         <div class="footer-center">
             <a href="/lab8/login">Вход</a>
             <a href="/lab8/register">Регистрация</a>
-            <a href="/lab8/articles">Список статей</a>
+            <a href="/lab8/list">Список моих статей</a>
+            <a href="/lab8/public_articles">Публичные статьи</a>
             <a href="/lab8/create">Создать статью</a>
+            <a href="/lab8/search">Поиск</a>
+            
+
             
         </div>
         <div class="footer-right">

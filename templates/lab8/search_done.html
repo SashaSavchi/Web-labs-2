@@ -1,0 +1,40 @@
+{% extends "lab8/lab8.html" %}
+
+{% block lab %} Лабораторная работа 8{% endblock %}
+
+{% block main %}
+    <h1>Результаты поиска</h1>
+
+    {% if error %}
+        <div style="color: red; font-weight: bold;">{{ error }}</div>
+    {% else %}
+        <h2>Мои статьи</h2>
+        {% for article in user_articles %}
+            <div style="margin-bottom: 20px;">
+                <h3>{{ article.title }}</h3>
+                <blockquote>{{ article.article_text }}</blockquote>
+                <form method="post" action="/lab8/favorite/{{ article.id }}" style="display: inline;">
+                    <button type="submit">{{ 'Убрать из любимых' if article.is_favorite else 'Добавить в любимые' }}</button>
+                </form>
+                <form method="get" action="/lab8/edit/{{ article.id }}" style="display: inline;">
+                    <button type="submit">Редактировать</button>
+                </form>
+                <form method="post" action="/lab8/delete/{{ article.id }}" style="display: inline;">
+                    <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить статью?');">Удалить</button>
+                </form>
+            </div>
+        {% endfor %}
+
+        <h2>Публичные статьи</h2>
+        {% for article in public_articles %}
+            <div style="margin-bottom: 20px;">
+                <h3>{{ article.title }}</h3>
+                <blockquote>{{ article.article_text }}</blockquote>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div>
+        <a href="/lab8">Вернуться в меню</a>
+    </div>
+{% endblock %}

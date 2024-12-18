@@ -1,0 +1,67 @@
+{% extends "lab8/lab8.html" %}
+
+{% block lab %} Лабораторная работа 8{% endblock %}
+
+{% block main %}
+    <h1>
+        {% if is_edit %}
+            Редактирование статьи
+        {% else %}
+            Создание статьи
+        {% endif %}
+    </h1>
+
+    <form method="post">
+        <div>
+            <label>
+                Название статьи:
+                <input 
+                    type="text" 
+                    maxlength="50" 
+                    name="title" 
+                    value="{{ article.title if article else '' }}" 
+                    required>
+            </label>
+        </div>
+
+        <div>
+            <label>
+                Текст статьи:
+                <textarea name="article_text" required>{{ article.article_text if article else '' }}</textarea>
+            </label>
+        </div>
+
+        <div>
+            <label>
+                <input type="checkbox" name="is_favorite" {{ 'checked' if article.is_favorite else '' }}>
+                Любимая статья
+            </label>
+        </div>
+
+        <div>
+            <label>
+                <input type="checkbox" name="is_public" {{ 'checked' if article.is_public else '' }}>
+                Сделать публичной
+            </label>
+        </div>
+
+        <button type="submit">
+            {% if is_edit %}
+                Сохранить изменения
+            {% else %}
+                Создать статью
+            {% endif %}
+        </button>
+
+        {% if error %}
+            <div style="color: red; font-weight: bold;">{{ error }}</div>
+        {% endif %}
+
+        <div>
+            <a href="/lab8/list">Вернуться к списку статей</a>
+        </div>
+        <div>
+            <a href="/lab8">Вернуться в меню</a>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "lab8/lab8.html" %}
+
+{% block lab %} Лабораторная работа 8{% endblock %}
+
+{% block main %}
+    <h1>Поиск статей</h1>
+    <form method="post">
+        <input type="text" name="search_query" placeholder="Введите текст для поиска" required>
+        <button type="submit">Поиск</button>
+    </form>
+
+    {% if error %}
+        <div style="color: red; font-weight: bold;">{{ error }}</div>
+    {% endif %}
+{% endblock %}

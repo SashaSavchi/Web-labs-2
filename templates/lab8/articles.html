@@ -1,0 +1,52 @@
+{% extends "lab8/lab8.html" %}
+
+{% block lab %} Лабораторная работа 8{% endblock %}
+
+{% block main %}
+    <h1>Мои статьи</h1>
+    {% if articles %}
+    <h2 style="color: maroon">Любимые статьи</h2>
+    {% for article in articles if article.is_favorite %}
+        <div style="margin-bottom: 20px;">
+            <h3>{{ article.title }}</h3>
+            <blockquote>{{ article.article_text }}</blockquote>
+            <form method="post" action="/lab8/favorite/{{ article.id }}" style="display: inline;">
+                <button type="submit">Удалить из любимого</button>
+            </form>
+            <form method="get" action="/lab8/edit/{{ article.id }}" style="display: inline;">
+                <button type="submit">Редактировать</button>
+            </form>
+            <form method="post" action="/lab8/delete/{{ article.id }}" style="display: inline;">
+                <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить статью?');">Удалить</button>
+            </form>
+        </div>
+        <div style="color: red; font-weight: bold;">
+            {{ favorite_error }}
+        </div>
+    {% endfor %}
+    
+    <h2 style="color: maroon">Все статьи</h2>
+    {% for article in articles %}
+        <div style="margin-bottom: 20px;">
+            <h3>{{ article.title }}</h3>
+            <blockquote>{{ article.article_text }}</blockquote>
+            <form method="post" action="/lab8/favorite/{{ article.id }}" style="display: inline;">
+                <button type="submit">Добавить в любимое</button>
+            </form>         
+            <form method="get" action="/lab8/edit/{{ article.id }}" style="display: inline;">
+                <button type="submit">Редактировать</button>
+            </form>
+            <form method="post" action="/lab8/delete/{{ article.id }}" style="display: inline;">
+                <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить статью?');">Удалить</button>
+            </form>
+        </div>
+    {% endfor %}
+{% endif %}
+
+    <div style="color: red; font-weight: bold;">
+        {{ error }}
+    </div>
+    <div>
+        <a href="/lab8">Вернуться в меню</a>
+    </div>
+{% endblock %}
