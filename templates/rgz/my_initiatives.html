@@ -4,11 +4,10 @@
     <h1>Мои инициативы</h1>
     <ol>
         {% for initiative in initiatives %}
-            <li style="max-width: 800px; margin: 0 auto; text-align: left;">  <!-- Установка максимальной ширины для инициативы -->
-                <strong>{{ initiative.title }}</strong> 
-                <p style="word-wrap: break-word;">{{ initiative.text }}</p> <!-- Разрешение переноса текста -->
+            <li style="max-width: 800px; margin: 0 auto; text-align: left;">  
+                <p style="word-wrap: break-word;">{{ initiative.text }}</p>
                 <div class="initiative-meta">
-                    Автор: {{ initiative.user.login }} Дата публикации: {{ initiative.created_at.strftime('%d-%m-%Y %H:%M') }}
+                    Автор: {{ initiative.user.login }} Дата публикации: {{ initiative.created_at.strftime('%d-%m-%Y') }}
                 </div>
                 <div>
                     <form method="get" action="/rgz/edit/{{ initiative.id }}" style="display: inline-block;">  
@@ -31,7 +30,7 @@
                 <strong>{{ published.title }}</strong> 
                 <p style="word-wrap: break-word;">{{ published.text }}</p> 
                 <div class="initiative-meta">
-                    Автор: {{ published.user.login }} Дата публикации: {{ published.created_at.strftime('%d-%m-%Y %H:%M') }}
+                    Автор: {{ published.user.login }} Дата публикации: {{ published.created_at.strftime('%d-%m-%Y') }}
                 </div>
                 <div>
                     <form method="get" action="/rgz/edit/{{ published.id }}" style="display: inline-block;">  

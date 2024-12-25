@@ -114,6 +114,7 @@ def my_initiatives():
     published_initiatives = db.session.query(initiative).filter_by(user_id=current_user.id, is_public=True).all()  
     return render_template('rgz/my_initiatives.html', initiatives=user_initiatives, published_initiatives=published_initiatives)
 
+
 @rgz.route('/rgz/edit/<int:initiative_id>', methods=['GET', 'POST'])
 @login_required
 def edit(initiative_id):
@@ -153,3 +154,17 @@ def delete(initiative_id):
         db.session.commit()
     
     return redirect('/rgz/my_initiatives')
+
+
+@rgz.route('/rgz/delete_account', methods=['POST'])
+@login_required
+def delete_account():
+    user_to_delete = users.query.filter_by(id=current_user.id).first()
+
+    if user_to_delete:
+        db.session.delete(user_to_delete)
+        db.session.commit()
+        logout_user()
+        return redirect('/rgz/?message=account_deleted')
+
+    return redirect('/rgz/?message=delete_failed')
