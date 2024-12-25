@@ -9,6 +9,51 @@
     <link rel="icon" href="{{ url_for('static', filename='favicon-16x16.png') }}"> 
     <link rel="icon" href="{{ url_for('static', filename='favicon-32x32.png') }}">
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: cursive;
+            padding-bottom: 80px;
+        }
+        header  {
+            top: 0;
+            width: 100%; 
+            position: fixed;
+        }
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+    
+        main ol {
+            list-style-type: decimal;
+            padding: 0;
+            margin: 0;
+            width: 100%; 
+            max-width: 800px; 
+        }
+    
+        main ol li {
+            text-align: left;
+            margin-bottom: 5px; 
+        }
+
+        .notification-container {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 800px;
+            z-index: 1000;
+            padding: 10px;
+        }
+
         footer {
             display: flex;
             align-items: center;
@@ -33,7 +78,7 @@
             text-align: center;
             color: white;
             background-color: rgb(93, 22, 174);
-            border-radius: 5px;
+            border-radius: 20px;
             font-size: 18px;
         }
 
@@ -47,15 +92,16 @@
             text-align: right;
             margin-left: 10px;
         }
+
         button {
             background-color: rgb(93, 22, 174);
             color: aliceblue;
             font-size: 18px;
-            border-radius: 5px;
+            border-radius: 20px;
             border: 0;
             padding: 10px 15px;
-            font-family: 'Times New Roman', Times, serif;
         }
+
         button:hover {
             background-color: rgb(165, 81, 213);
             box-shadow: 0 4px 10px rgba(255, 255, 255, 0.641);
@@ -87,8 +133,14 @@
             cursor: pointer;
             font-size: 18px;
         }
-        .close:hover{
+        .close:hover {
             background-color: #ffffff;
+        }
+
+        .initiative-meta {
+            color: lightgray;
+            text-align: right;
+            font-size: 14px;
         }
     </style>
     <script>
@@ -113,11 +165,7 @@
     </script>    
 </head>
 <body>
-    <header>
-        <a href="{{ url_for('index') }}">Главное меню</a>
-        Расчётно-графическое задание Цукановой Александры Руслановны ФБИ-21
-    </header>
-    <main>
+    <div class="notification-container">
         {% if message == 'success_reg' %}
         <div id="notification" class="notification">
             <strong>Успешная регистрация!</strong> Нажмите <a href="{{ url_for('rgz.login') }}">сюда</a>, чтобы войти в систему.
@@ -130,25 +178,30 @@
             <button class="close" onclick="closeNotification()">×</button>
         </div>
         {% endif %}
+    </div>
 
+    <header>
+        <a href="{{ url_for('index') }}">Главное меню</a>
+        Расчётно-графическое задание Цукановой Александры Руслановны ФБИ-21
+    </header>
+    <main>
         {% if request.path == '/rgz/' %}
-        <h1 style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>
             Инициативы
             <button type="submit" formaction="/rgz/">Поиск</button>
         </h1>
         
-        <ul>
+        <ol>
             {% for initiative in initiatives.items %}
-                <li style="margin-bottom: 15px;"> 
+                <li>
                     <strong>{{ initiative.title }}</strong> 
-                    <p style="margin: 5px 0;">{{ initiative.text }}</p> 
-                    <small style="color: lightgray; float: right;">
+                    <p style="word-wrap: break-word;">{{ initiative.text }}</p> 
+                    <div class="initiative-meta">
                         Автор: {{ initiative.user.login }} Дата публикации: {{ initiative.created_at.strftime('%d-%m-%Y %H:%M') }}
-                    </small>
+                    </div>
                 </li>
             {% endfor %}
-        </ul>
-         
+        </ol>
         
         <div>
             {% if initiatives.has_prev %}
@@ -163,20 +216,17 @@
         {% block main %}
         {{ main_content|safe }}
         {% endblock %}
-    </main>    
+    </main>
     <footer>
         <div class="footer-center">
             {% if current_user.is_authenticated %}
                 <a href="/rgz/my_initiatives">Мои инициативы</a>
-                <a href="/rgz/search">Поиск инициативы</a>
+                <a href="/rgz/create">Создать инициативу</a>
                 <a href="/rgz">Вернуться на главную</a>
-                <form action="/rgz/logout" method="post" onsubmit="return confirm('Вы уверены, что хотите выйти?');">
-                    <button type="submit">Выйти</button>
-                </form>
+                <a href="/rgz/logout" onclick="return confirm('Вы уверены, что хотите выйти?');">Выйти</a>
             {% else %}
                 <a href="/rgz/login">Вход</a>
                 <a href="/rgz/register">Регистрация</a>
-                <a href="/rgz/search">Поиск инициативы</a>
             {% endif %}
         </div>
         <div class="footer-right">

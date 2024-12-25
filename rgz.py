@@ -42,7 +42,7 @@ def register():
     db.session.add(new_user)
     db.session.commit()
 
-    return redirect(url_for('rgz.rgz_page', message='success_reg'))
+    return redirect('/rgz/?message=success_reg')
 
 
 @rgz.route('/rgz/login', methods=['GET', 'POST'])
@@ -64,12 +64,12 @@ def login():
 
     if user and check_password_hash(user.password, password_form):
         login_user(user, remember=remember)
-        return redirect(url_for('rgz.rgz_page', message='success_log'))
+        return redirect('/rgz/?message=success_log')
 
     return render_template('rgz/login.html', error='Ошибка входа: логин и/или пароль неверны')
 
 
-@rgz.route('/rgz/logout', methods=['POST'])
+@rgz.route('/rgz/logout')
 @login_required
 def logout():
     logout_user()
@@ -104,13 +104,14 @@ def create():
     db.session.add(new_initiative)
     db.session.commit()
 
-    return redirect(url_for('rgz.rgz_page', message='initiative_created'))
+    return redirect('/rgz/?message=initiative_created')
+
 
 @rgz.route('/rgz/my_initiatives')
 @login_required
 def my_initiatives():
     user_initiatives = db.session.query(initiative).filter_by(user_id=current_user.id).all()
-    published_initiatives = db.session.query(initiative).filter_by(is_public=True).all()  
+    published_initiatives = db.session.query(initiative).filter_by(user_id=current_user.id, is_public=True).all()  
     return render_template('rgz/my_initiatives.html', initiatives=user_initiatives, published_initiatives=published_initiatives)
 
 @rgz.route('/rgz/edit/<int:initiative_id>', methods=['GET', 'POST'])
@@ -119,7 +120,7 @@ def edit(initiative_id):
     initiative_obj = db.session.query(initiative).filter(initiative.id == initiative_id, initiative.user_id == current_user.id).first()
 
     if not initiative_obj:
-        return redirect(url_for('rgz.my_initiatives'))
+        return redirect('/rgz/my_initiatives')
 
     if request.method == 'GET':
         return render_template('rgz/create_initiative.html', login=current_user.login, is_edit=True, initiative=initiative_obj)
@@ -136,4 +137,19 @@ def edit(initiative_id):
     initiative_obj.is_public = is_public
     db.session.commit()
 
-    return redirect(url_for('rgz.my_initiatives'))
+    return redirect('/rgz/my_initiatives')
+
+
+@rgz.route('/rgz/delete/<int:initiative_id>', methods=['POST'])
+@login_required
+def delete(initiative_id):
+    initiative_to_delete = db.session.query(initiative).filter(
+        initiative.id == initiative_id,
+        initiative.user_id == current_user.id
+    ).first()
+    
+    if initiative_to_delete:
+        db.session.delete(initiative_to_delete)
+        db.session.commit()
+    
+    return redirect('/rgz/my_initiatives')

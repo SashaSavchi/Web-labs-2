@@ -2,35 +2,52 @@
 
 {% block main %}
     <h1>Мои инициативы</h1>
-    <ul>
+    <ol>
         {% for initiative in initiatives %}
-            <li>
-                <strong>{{ initiative.title }}</strong> - {{ initiative.text }}
-                <a href="{{ url_for('rgz.edit', initiative_id=initiative.id) }}">Редактировать</a>
+            <li style="max-width: 800px; margin: 0 auto; text-align: left;">  <!-- Установка максимальной ширины для инициативы -->
+                <strong>{{ initiative.title }}</strong> 
+                <p style="word-wrap: break-word;">{{ initiative.text }}</p> <!-- Разрешение переноса текста -->
+                <div class="initiative-meta">
+                    Автор: {{ initiative.user.login }} Дата публикации: {{ initiative.created_at.strftime('%d-%m-%Y %H:%M') }}
+                </div>
+                <div>
+                    <form method="get" action="/rgz/edit/{{ initiative.id }}" style="display: inline-block;">  
+                        <button type="submit">Редактировать</button>
+                    </form>
+                    <form method="post" action="/rgz/delete/{{ initiative.id }}" style="display: inline-block;">  
+                        <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить статью?');">Удалить</button>
+                    </form>
+                </div>
             </li>
         {% else %}
             <p>У вас пока нет инициатив.</p>
         {% endfor %}
-    </ul>
+    </ol>
     
     <h2>Опубликованные инициативы</h2>
-    <ul>
+    <ol>
         {% for published in published_initiatives %}
-            <li>
-                <strong>{{ published.title }}</strong> - {{ published.text }} 
-                <a href="{{ url_for('rgz.edit', initiative_id=published.id) }}">Редактировать</a>
+            <li style="max-width: 800px; margin: 0 auto; text-align: left;">  
+                <strong>{{ published.title }}</strong> 
+                <p style="word-wrap: break-word;">{{ published.text }}</p> 
+                <div class="initiative-meta">
+                    Автор: {{ published.user.login }} Дата публикации: {{ published.created_at.strftime('%d-%m-%Y %H:%M') }}
+                </div>
+                <div>
+                    <form method="get" action="/rgz/edit/{{ published.id }}" style="display: inline-block;">  
+                        <button type="submit">Редактировать</button>
+                    </form>
+                    <form method="post" action="/rgz/delete/{{ published.id }}" style="display: inline-block;">  
+                        <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить статью?');">Удалить</button>
+                    </form>
+                </div>
             </li>
         {% else %}
             <p>Нет опубликованных инициатив.</p>
         {% endfor %}
-    </ul>
-
-    <div>
-        <a href="/rgz/create">Создать новую инициативу</a>
-    </div>
+    </ol>
 
     <div>
         <a href="/rgz">Вернуться на главную</a>
     </div>
-
 {% endblock %}
