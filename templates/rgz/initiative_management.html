@@ -1,0 +1,20 @@
+{% extends "rgz/rgz.html" %}
+
+{% block main %}
+    <h1>Все инициативы</h1>
+    <ol>
+        {% for initiative in initiatives %}
+            <li>
+                {{ initiative.title }}
+                <form method="post" action="/rgz/delete/{{ initiative.id }}" style="display: inline-block;">  
+                    <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить инициативу?');">Удалить</button>
+                </form>
+            </li>
+        {% else %}
+            <p>Нет инициатив.</p>
+        {% endfor %}
+    </ol>
+    <div>
+        <a href="/rgz">Вернуться на главную</a>
+    </div>
+{% endblock %}

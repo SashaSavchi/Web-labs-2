@@ -33,8 +33,11 @@
         <div>
             <label>
                 <input type="checkbox" name="is_public" {{ 'checked' if initiative.is_public else '' }}>
-                Сделать публичной
+                Сделать публичной 
             </label>
+        </div>
+        <div>
+            Опубликованную инициативу невозможно будет изменить!
         </div>
 
         <button type="submit" style="font-family: cursive;">

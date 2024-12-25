@@ -1,0 +1,25 @@
+{% extends "rgz/rgz.html" %}
+
+{% block main %}
+    <h1>Управление пользователями</h1>
+    <ol>
+        {% if users %}
+            {% for user in users %}
+                <li>
+                    {{ user.login }}
+                    {% if user.id != current_user.id %} 
+                        <form method="post" action="/rgz/delete_account" style="display: inline-block;">  
+                            <input type="hidden" name="user_id" value="{{ user.id }}">
+                            <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить пользователя?');">Удалить</button>
+                        </form>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        {% else %}
+            <p>Нет пользователей.</p>
+        {% endif %}
+    </ol>
+    <div>
+        <a href="/rgz">Вернуться на главную</a>
+    </div>
+{% endblock %}

@@ -8,7 +8,7 @@ class users(db.Model, UserMixin):
     password = db.Column(db.String(162), nullable = False)
     is_admin = db.Column(db.Boolean, default=False)
     initiatives = db.relationship('initiative', backref='user', lazy=True)
-
+    
 
 class articles(db.Model):
     id = db.Column(db.Integer, primary_key = True)

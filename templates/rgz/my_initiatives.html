@@ -4,22 +4,25 @@
     <h1>Мои инициативы</h1>
     <ol>
         {% for initiative in initiatives %}
-            <li style="max-width: 800px; margin: 0 auto; text-align: left;">  
+            <li style="max-width: 800px; margin: 0 auto; text-align: left;">
+                <strong>{{ initiative.title }}</strong> 
                 <p style="word-wrap: break-word;">{{ initiative.text }}</p>
                 <div class="initiative-meta">
                     Автор: {{ initiative.user.login }} Дата публикации: {{ initiative.created_at.strftime('%d-%m-%Y') }}
                 </div>
                 <div>
-                    <form method="get" action="/rgz/edit/{{ initiative.id }}" style="display: inline-block;">  
-                        <button type="submit">Редактировать</button>
-                    </form>
+                    {% if not initiative.is_public %} 
+                        <form method="get" action="/rgz/edit/{{ initiative.id }}" style="display: inline-block;">  
+                            <button type="submit">Редактировать</button>
+                        </form>
+                    {% endif %}
                     <form method="post" action="/rgz/delete/{{ initiative.id }}" style="display: inline-block;">  
                         <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить статью?');">Удалить</button>
                     </form>
                 </div>
             </li>
         {% else %}
-            <p>У вас пока нет инициатив.</p>
+            <p>Вы еще не добавили ни одной инициативы.</p>
         {% endfor %}
     </ol>
     
@@ -33,9 +36,6 @@
                     Автор: {{ published.user.login }} Дата публикации: {{ published.created_at.strftime('%d-%m-%Y') }}
                 </div>
                 <div>
-                    <form method="get" action="/rgz/edit/{{ published.id }}" style="display: inline-block;">  
-                        <button type="submit">Редактировать</button>
-                    </form>
                     <form method="post" action="/rgz/delete/{{ published.id }}" style="display: inline-block;">  
                         <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить статью?');">Удалить</button>
                     </form>

@@ -104,7 +104,7 @@ def create():
     db.session.add(new_initiative)
     db.session.commit()
 
-    return redirect('/rgz/?message=initiative_created')
+    return redirect('/rgz/my_initiatives')
 
 
 @rgz.route('/rgz/my_initiatives')
@@ -144,27 +144,66 @@ def edit(initiative_id):
 @rgz.route('/rgz/delete/<int:initiative_id>', methods=['POST'])
 @login_required
 def delete(initiative_id):
-    initiative_to_delete = db.session.query(initiative).filter(
-        initiative.id == initiative_id,
-        initiative.user_id == current_user.id
-    ).first()
+    initiative_to_delete = db.session.query(initiative).filter(initiative.id == initiative_id).first()
     
     if initiative_to_delete:
-        db.session.delete(initiative_to_delete)
-        db.session.commit()
-    
+        if current_user.is_admin or initiative_to_delete.user_id == current_user.id:
+            db.session.delete(initiative_to_delete)
+            db.session.commit()
+
+    if current_user.is_admin:
+        return redirect('/rgz/admin/initiative_management')
     return redirect('/rgz/my_initiatives')
 
 
 @rgz.route('/rgz/delete_account', methods=['POST'])
 @login_required
 def delete_account():
-    user_to_delete = users.query.filter_by(id=current_user.id).first()
+    if not current_user.is_admin:
+            user = db.session.query(users).filter_by(id=current_user.id).first()
+            if user:
+                initiatives_to_delete = db.session.query(initiative).filter(
+                    initiative.user_id == user.id
+                ).all()
+                for initiative_item in initiatives_to_delete: 
+                    db.session.delete(initiative_item)
 
-    if user_to_delete:
+                db.session.delete(user)
+                db.session.commit()
+                
+            logout_user()
+            return redirect('/rgz/')
+    
+    user_id = request.form.get('user_id')
+    user_to_delete = db.session.query(users).filter_by(id=user_id).first()
+    
+    if user_to_delete and user_to_delete.id != current_user.id:
+        initiatives_to_delete = db.session.query(initiative).filter(
+            initiative.user_id == user_to_delete.id
+        ).all()
+        for initiative_item in initiatives_to_delete:
+            db.session.delete(initiative_item)
         db.session.delete(user_to_delete)
         db.session.commit()
-        logout_user()
-        return redirect('/rgz/?message=account_deleted')
+    
+    return redirect('/rgz/admin/user_management')
 
-    return redirect('/rgz/?message=delete_failed')
+
+@rgz.route('/rgz/admin/user_management')
+@login_required
+def user_management():
+    if not current_user.is_admin: 
+        return redirect('/rgz/')
+    
+    all_users = db.session.query(users).all()
+    return render_template('rgz/user_management.html', users=all_users)
+
+
+@rgz.route('/rgz/admin/initiative_management')
+@login_required
+def initiative_management():
+    if not current_user.is_admin:  
+        return redirect('/rgz/')
+
+    all_initiatives = db.session.query(initiative).all()
+    return render_template('rgz/initiative_management.html', initiatives=all_initiatives)
