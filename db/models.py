@@ -25,5 +25,6 @@ class initiative(db.Model):
     title = db.Column(db.String(150), nullable=False)
     text = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow) 
+    is_public = db.Column(db.Boolean)
     votes = db.Column(db.Integer, default=0) 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)

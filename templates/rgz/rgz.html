@@ -49,7 +49,7 @@
         }
         button {
             background-color: rgb(93, 22, 174);
-            color:aliceblue;
+            color: aliceblue;
             font-size: 18px;
             border-radius: 5px;
             border: 0;
@@ -74,7 +74,7 @@
         .notification.fade-out {
             opacity: 0;
             transition: opacity 0.5s forwards;
-          }
+        }
         
         .close {
             background: none;
@@ -89,8 +89,7 @@
         }
         .close:hover{
             background-color: #ffffff;
-        } 
-
+        }
     </style>
     <script>
         function closeNotification() {
@@ -116,6 +115,7 @@
 <body>
     <header>
         <a href="{{ url_for('index') }}">Главное меню</a>
+        Расчётно-графическое задание Цукановой Александры Руслановны ФБИ-21
     </header>
     <main>
         {% if message == 'success_reg' %}
@@ -130,13 +130,26 @@
             <button class="close" onclick="closeNotification()">×</button>
         </div>
         {% endif %}
+
         {% if request.path == '/rgz/' %}
-        <h1>Инициативы</h1>
+        <h1 style="display: flex; justify-content: space-between; align-items: center;">
+            Инициативы
+            <button type="submit" formaction="/rgz/">Поиск</button>
+        </h1>
+        
         <ul>
             {% for initiative in initiatives.items %}
-                <li>{{ initiative.title }} - {{ initiative.text }}</li>
+                <li style="margin-bottom: 15px;"> 
+                    <strong>{{ initiative.title }}</strong> 
+                    <p style="margin: 5px 0;">{{ initiative.text }}</p> 
+                    <small style="color: lightgray; float: right;">
+                        Автор: {{ initiative.user.login }} Дата публикации: {{ initiative.created_at.strftime('%d-%m-%Y %H:%M') }}
+                    </small>
+                </li>
             {% endfor %}
         </ul>
+         
+        
         <div>
             {% if initiatives.has_prev %}
                 <a href="{{ url_for('rgz.rgz_page', page=initiatives.prev_num) }}">← Предыдущая</a>
@@ -154,11 +167,12 @@
     <footer>
         <div class="footer-center">
             {% if current_user.is_authenticated %}
+                <a href="/rgz/my_initiatives">Мои инициативы</a>
+                <a href="/rgz/search">Поиск инициативы</a>
+                <a href="/rgz">Вернуться на главную</a>
                 <form action="/rgz/logout" method="post" onsubmit="return confirm('Вы уверены, что хотите выйти?');">
                     <button type="submit">Выйти</button>
                 </form>
-                <a href="/rgz/list">Мои инициативы</a>
-                <a href="/rgz/search">Поиск инициативы</a>
             {% else %}
                 <a href="/rgz/login">Вход</a>
                 <a href="/rgz/register">Регистрация</a>

@@ -1,0 +1,57 @@
+{% extends "rgz/rgz.html" %}
+
+{% block main %}
+    <h1>
+        {% if is_edit %}
+            Редактирование инициативы
+        {% else %}
+            Создание инициативы
+        {% endif %}
+    </h1>
+
+    <form method="post">
+        <div>
+            <label>
+                Заголовок
+                <input 
+                    type="text" 
+                    maxlength="50" 
+                    name="title" 
+                    value="{{ initiative.title if initiative else '' }}" 
+                    required>
+            </label>
+        </div>
+
+        <div>
+            <label>
+                Описание
+                <textarea name="text" required>{{ initiative.text if initiative else '' }}</textarea>
+            </label>
+        </div>
+
+
+        <div>
+            <label>
+                <input type="checkbox" name="is_public" {{ 'checked' if initiative.is_public else '' }}>
+                Сделать публичной
+            </label>
+        </div>
+
+        <button type="submit">
+            {% if is_edit %}
+                Сохранить изменения
+            {% else %}
+                Создать инициативу
+            {% endif %}
+        </button>
+
+        {% if error %}
+            <div style="color: red; font-weight: bold;">{{ error }}</div>
+        {% endif %}
+
+        <div>
+            <a href="{{ url_for('rgz.my_initiatives') }}">Вернуться к моим инициативам</a>
+        </div>
+    </form>
+{% endblock %}
+

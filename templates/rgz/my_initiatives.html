@@ -1,0 +1,36 @@
+{% extends "rgz/rgz.html" %}
+
+{% block main %}
+    <h1>Мои инициативы</h1>
+    <ul>
+        {% for initiative in initiatives %}
+            <li>
+                <strong>{{ initiative.title }}</strong> - {{ initiative.text }}
+                <a href="{{ url_for('rgz.edit', initiative_id=initiative.id) }}">Редактировать</a>
+            </li>
+        {% else %}
+            <p>У вас пока нет инициатив.</p>
+        {% endfor %}
+    </ul>
+    
+    <h2>Опубликованные инициативы</h2>
+    <ul>
+        {% for published in published_initiatives %}
+            <li>
+                <strong>{{ published.title }}</strong> - {{ published.text }} 
+                <a href="{{ url_for('rgz.edit', initiative_id=published.id) }}">Редактировать</a>
+            </li>
+        {% else %}
+            <p>Нет опубликованных инициатив.</p>
+        {% endfor %}
+    </ul>
+
+    <div>
+        <a href="/rgz/create">Создать новую инициативу</a>
+    </div>
+
+    <div>
+        <a href="/rgz">Вернуться на главную</a>
+    </div>
+
+{% endblock %}
