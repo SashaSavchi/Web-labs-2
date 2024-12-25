@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block lab %}  Лабораторная работа 9 {% endblock %}
+
+{% block main %}
+
+<h1>{{ message }}</h1>
+
+<img src="{{ url_for('static', filename=image) }}" alt="Gift Image">
+
+{% endblock %}

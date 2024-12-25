@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block lab %} Лабораторная работа 9 {% endblock %}
+
+{% block main %}
+<h1>Ваши предпочтения</h1>
+<form method="post">
+    <label>Что вам больше нравится?</label><br>
+    <input type="radio" id="fun" name="preference" value="веселье" required>
+    <label for="fun">Веселье</label><br>
+    <input type="radio" id="sweets" name="preference" value="сладости" required>
+    <label for="sweets">Сладости</label><br>
+    <input type="radio" id="gifts" name="preference" value="подарки" required>
+    <label for="gifts">Подарки</label><br>
+    <input type="radio" id="food" name="preference" value="еда" required>
+    <label for="food">Еда</label><br>
+    <input type="submit" value="Далее">
+</form>
+{% endblock %}

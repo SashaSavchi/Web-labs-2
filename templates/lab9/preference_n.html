@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block lab %} Лабораторная работа 9 {% endblock %}
+
+{% block main %}
+<h1>Подбор предпочтений</h1>
+<form method="post">
+    {% if request.args.get('preference') == 'веселье' %}
+        <label>Что вам нравится больше?</label><br>
+        <input type="radio" id="toys" name="preference_n" value="игрушки" required>
+        <label for="toys">Игрушки</label><br>
+        <input type="radio" id="games" name="preference_n" value="игры" required>
+        <label for="games">Игры</label><br>
+    {% elif request.args.get('preference') == 'сладости' %}
+        <label>Что вам нравится больше?</label><br>
+        <input type="radio" id="candies" name="preference_n" value="конфеты" required>
+        <label for="candies">Конфеты</label><br>
+        <input type="radio" id="cookies" name="preference_n" value="печенье" required>
+        <label for="cookies">Печенье</label><br>
+    {% elif request.args.get('preference') == 'подарки' %}
+        <label>Что вам нравится больше?</label><br>
+        <input type="radio" id="tech" name="preference_n" value="технологии" required>
+        <label for="tech">Технологии</label><br>
+        <input type="radio" id="decor" name="preference_n" value="декор" required>
+        <label for="decor">Декор</label><br>
+    {% elif request.args.get('preference') == 'еда' %}
+        <label>Что вам нравится больше?</label><br>
+        <input type="radio" id="cake" name="preference_n" value="торт" required>
+        <label for="cake">Торт</label><br>
+        <input type="radio" id="chocolate" name="preference_n" value="шоколад" required>
+        <label for="chocolate">Шоколад</label><br>
+    {% endif %}
+    <input type="submit" value="Далее">
+</form>
+{% endblock %}

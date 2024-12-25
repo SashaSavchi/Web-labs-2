@@ -2,10 +2,11 @@
 
 {% block lab %}  Лабораторная работа 9 {% endblock %}
 
-{% block script %}
-
-{% endblock %}
-
 {% block main %}
     <h1 class="header9 center">Поздравление</h1>
+    <form method="post">
+        <label for="name">Введите ваше имя:</label>
+        <input type="text" id="name" name="name" required>
+        <input type="submit" value="Далее">
+    </form>
 {% endblock %}
