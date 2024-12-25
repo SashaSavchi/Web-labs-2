@@ -1,0 +1,24 @@
+{% extends "rgz/rgz.html" %}
+
+{% block main %}
+    <h1>Регистрация</h1>
+    <form action="/rgz/register" method="post">
+        <div style="margin-bottom: 10px;">
+            <label>
+                Логин: <input type="text" name="login" value="{{ login | default('') }}"> 
+            </label>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label>
+                Пароль: <input type="password" name="password"> 
+            </label>
+        </div>
+        <div style="color: red; font-weight: bold;">
+            {{ error }}
+        </div>
+        <button type="submit">Зарегистрироваться</button>
+        <div>
+            <a href="/rgz">Вернуться в меню</a>
+        </div>
+    </form>
+{% endblock %}

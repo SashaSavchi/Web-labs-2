@@ -1,7 +1,177 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>РГЗ. Инициативы</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='lab1/main.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon"> 
+    <link rel="icon" href="{{ url_for('static', filename='favicon-16x16.png') }}"> 
+    <link rel="icon" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <style>
+        footer {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            transition: background-color 0.2s;
+        }
 
-{% block lab %}  Инициативы {% endblock %}
+        footer:hover {
+            background-color: rgb(80, 18, 18);
+        }
 
-{% block main %}
+        .footer-center {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
 
-{% endblock %}
+        .footer-center a {
+            display: inline-block;
+            padding: 10px 15px;
+            text-align: center;
+            color: white;
+            background-color: rgb(93, 22, 174);
+            border-radius: 5px;
+            font-size: 18px;
+        }
+
+        .footer-center a:hover {
+            background-color: rgb(165, 81, 213);
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.641);
+        }
+
+        .footer-right {
+            font-size: 18px;
+            text-align: right;
+            margin-left: 10px;
+        }
+        button {
+            background-color: rgb(93, 22, 174);
+            color:aliceblue;
+            font-size: 18px;
+            border-radius: 5px;
+            border: 0;
+            padding: 10px 15px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        button:hover {
+            background-color: rgb(165, 81, 213);
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.641);
+        }
+
+        .notification {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .notification.fade-out {
+            opacity: 0;
+            transition: opacity 0.5s forwards;
+          }
+        
+        .close {
+            background: none;
+            border: none;
+            color: #155724;
+            position: absolute;
+            bottom: 0px;
+            top: 0px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .close:hover{
+            background-color: #ffffff;
+        } 
+
+    </style>
+    <script>
+        function closeNotification() {
+            const notification = document.getElementById('notification');
+            if (notification) {
+                notification.style.display = 'none';
+            }
+        }
+        
+        function autoCloseNotification() {
+            const notification = document.getElementById('notification');
+            if (notification.dataset.autoClose === 'true') {
+                setTimeout(() => {
+                    notification.classList.add('fade-out');
+                    setTimeout(() => notification.style.display = 'none', 500); 
+                }, 2000); 
+            }
+        }
+        
+        window.onload = autoCloseNotification;
+    </script>    
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('index') }}">Главное меню</a>
+    </header>
+    <main>
+        {% if message == 'success_reg' %}
+        <div id="notification" class="notification">
+            <strong>Успешная регистрация!</strong> Нажмите <a href="{{ url_for('rgz.login') }}">сюда</a>, чтобы войти в систему.
+            <button class="close" onclick="closeNotification()">×</button>
+        </div>
+        {% endif %}
+        {% if message == 'success_log' %}
+        <div id="notification" class="notification" data-auto-close="true">
+            <strong>Успешный вход в систему!</strong>
+            <button class="close" onclick="closeNotification()">×</button>
+        </div>
+        {% endif %}
+        {% if request.path == '/rgz/' %}
+        <h1>Инициативы</h1>
+        <ul>
+            {% for initiative in initiatives.items %}
+                <li>{{ initiative.title }} - {{ initiative.text }}</li>
+            {% endfor %}
+        </ul>
+        <div>
+            {% if initiatives.has_prev %}
+                <a href="{{ url_for('rgz.rgz_page', page=initiatives.prev_num) }}">← Предыдущая</a>
+            {% endif %}
+            <span>Страница {{ initiatives.page }} из {{ initiatives.pages }}</span>
+            {% if initiatives.has_next %}
+                <a href="{{ url_for('rgz.rgz_page', page=initiatives.next_num) }}">Следующая →</a>
+            {% endif %}
+        </div>
+        {% endif %}
+        {% block main %}
+        {{ main_content|safe }}
+        {% endblock %}
+    </main>    
+    <footer>
+        <div class="footer-center">
+            {% if current_user.is_authenticated %}
+                <form action="/rgz/logout" method="post" onsubmit="return confirm('Вы уверены, что хотите выйти?');">
+                    <button type="submit">Выйти</button>
+                </form>
+                <a href="/rgz/list">Мои инициативы</a>
+                <a href="/rgz/search">Поиск инициативы</a>
+            {% else %}
+                <a href="/rgz/login">Вход</a>
+                <a href="/rgz/register">Регистрация</a>
+                <a href="/rgz/search">Поиск инициативы</a>
+            {% endif %}
+        </div>
+        <div class="footer-right">
+            {% if current_user.is_authenticated %}
+                {{ current_user.login }} 
+            {% else %}
+                Anon
+            {% endif %}
+        </div>
+    </footer>
+</body>
+</html>
