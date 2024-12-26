@@ -14,8 +14,13 @@
             padding: 0;
             font-family: cursive;
             padding-bottom: 100px;
+            background-image: url("{{ url_for('static', filename='rgz/gerb.png') }}");
+            background-size: 50%;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.95; 
         }
-        header  {
+        header {
             top: 0;
             width: 100%; 
             position: fixed;
@@ -27,7 +32,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 5px;
+            padding: 40px;
             box-sizing: border-box;
         }
     
@@ -111,10 +116,10 @@
         }
 
         .notification {
-            background-color: #d4edda;
+            background-color: #f0f8f9;
             color: #155724;
             padding: 10px;
-            border: 1px solid #c3e6cb;
+            border: 0px;
             border-radius: 5px;
             margin-bottom: 15px;
             position: relative;
@@ -173,7 +178,7 @@
         }
         
         button.selected {
-            background-color: green;
+            background-color: rgb(18, 90, 61);
             color: white;
             font-weight: bold;
         }

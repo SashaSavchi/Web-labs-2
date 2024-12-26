@@ -1,9 +1,10 @@
 from flask import Blueprint, redirect, render_template, request, url_for
 from db import db
 from db.models import initiative, users, Vote
-from flask_login import login_user, login_required, current_user, logout_user
+from flask_login import login_user, LoginManager, login_required, current_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
+
 rgz = Blueprint('rgz', __name__) 
 
 @rgz.route('/rgz/')
@@ -14,13 +15,17 @@ def rgz_page():
         .filter_by(is_public=True) \
         .order_by(initiative.created_at.desc()) \
         .paginate(page=page, per_page=per_page, error_out=False)
-    user_votes = {
-        vote.initiative_id: vote.value for vote in db.session.query(Vote).filter_by(user_id=current_user.id).all()
-    }
+    user_votes = {}
+    if current_user.is_authenticated:
+        user_votes = {
+            vote.initiative_id: vote.value for vote in db.session.query(Vote).filter_by(user_id=current_user.id).all()
+        }
     message = request.args.get('message', None)
     title = request.args.get('title')
     return render_template('rgz/rgz.html', initiatives=initiatives, message=message, user_votes=user_votes, title=title)
 
+
+import re
 
 @rgz.route('/rgz/register', methods=['GET', 'POST'])
 def register():
@@ -31,14 +36,21 @@ def register():
     password_form = request.form.get('password', '')
 
     if not login_form:
-        return render_template('rgz/register.html', error='Заполните имя пользователя')
+        return render_template('rgz/register.html', error='Заполните имя пользователя', login=login_form)
 
     if not password_form:
-        return render_template('rgz/register.html', error='Заполните пароль')
+        return render_template('rgz/register.html', error='Заполните пароль', login=login_form)
+
+    # Проверяем на наличие русских букв
+    if re.search(r'[а-яА-Я]', login_form):
+        return render_template('rgz/register.html', error='Логин не должен содержать русские буквы', login=login_form)
+
+    if re.search(r'[а-яА-Я]', password_form):
+        return render_template('rgz/register.html', error='Пароль не должен содержать русские буквы', login=login_form)
 
     login_exists = users.query.filter_by(login=login_form).first()
     if login_exists:
-        return render_template('rgz/register.html', error='Такой пользователь уже существует')
+        return render_template('rgz/register.html', error='Такой пользователь уже существует', login=login_form)
 
     password_hash = generate_password_hash(password_form)
     new_user = users(login=login_form, password=password_hash)
@@ -52,16 +64,23 @@ def register():
 def login():
     if request.method == 'GET':
         return render_template('rgz/login.html')
-    
+
     login_form = request.form.get('login', '')
     password_form = request.form.get('password', '')
     remember = request.form.get('remember', 'False') == 'True'
 
     if not login_form:
-        return render_template('rgz/login.html', error='Заполните имя пользователя')
+        return render_template('rgz/login.html', error='Заполните имя пользователя', login=login_form)
 
     if not password_form:
-        return render_template('rgz/login.html', error='Заполните пароль')
+        return render_template('rgz/login.html', error='Заполните пароль', login=login_form)
+
+    # Проверяем на наличие русских букв
+    if re.search(r'[а-яА-Я]', login_form):
+        return render_template('rgz/login.html', error='Логин не должен содержать русские буквы', login=login_form)
+
+    if re.search(r'[а-яА-Я]', password_form):
+        return render_template('rgz/login.html', error='Пароль не должен содержать русские буквы', login=login_form)
 
     user = users.query.filter_by(login=login_form).first()
 
@@ -69,7 +88,7 @@ def login():
         login_user(user, remember=remember)
         return redirect('/rgz/?message=success_log')
 
-    return render_template('rgz/login.html', error='Ошибка входа: логин и/или пароль неверны')
+    return render_template('rgz/login.html', error='Ошибка входа: логин и/или пароль неверны', login=login_form)
 
 
 @rgz.route('/rgz/logout')
@@ -122,7 +141,9 @@ def my_initiatives():
 @rgz.route('/rgz/edit/<int:initiative_id>', methods=['GET', 'POST'])
 @login_required
 def edit(initiative_id):
-    initiative_obj = db.session.query(initiative).filter(initiative.id == initiative_id, initiative.user_id == current_user.id).first()
+    initiative_obj = db.session.query(initiative).filter(
+        initiative.id == initiative_id
+    ).first()
 
     if not initiative_obj:
         return redirect('/rgz/my_initiatives')
@@ -140,13 +161,15 @@ def edit(initiative_id):
     initiative_obj.title = title
     initiative_obj.text = text
 
-
     if is_public and not initiative_obj.is_public:
         initiative_obj.published_at = datetime.utcnow()
 
     initiative_obj.is_public = is_public
     db.session.commit()
 
+    if current_user.is_admin:
+        return redirect('/rgz/admin/initiative_management')
+    
     return redirect('/rgz/my_initiatives')
 
 
@@ -222,7 +245,7 @@ def user_management():
 def initiative_management():
     if not current_user.is_admin:  
         return redirect('/rgz/')
-
+    
     all_initiatives = db.session.query(initiative).all()
     return render_template('rgz/initiative_management.html', initiatives=all_initiatives)
 
@@ -258,3 +281,31 @@ def vote(initiative_id):
     return redirect('/rgz/')
 
 
+# @lab8.route('/lab8/search', methods=['GET', 'POST'])
+# @login_required
+# def search():
+#     if request.method == 'POST':
+#         search_query = request.form.get('search_query')
+#         login_id = current_user.id
+#         user_articles = db.session.query(articles).filter(
+#             articles.login_id == login_id,
+#             (articles.title.like(f'%{search_query}%')) |
+#             (articles.article_text.like(f'%{search_query}%'))
+#         ).all()
+
+#         public_articles = db.session.query(articles).filter(
+#             articles.is_public == True,
+#             (articles.title.like(f'%{search_query}%')) |
+#             (articles.article_text.like(f'%{search_query}%'))
+#         ).all()
+
+#         if not user_articles and not public_articles:
+#             return render_template('/lab8/search_done.html', error='Ничего не найдено')
+
+#         return render_template(
+#             '/lab8/search_done.html',
+#             user_articles=user_articles,
+#             public_articles=public_articles
+#         )
+
+#     return render_template('/lab8/search.html')

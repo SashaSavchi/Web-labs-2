@@ -1,6 +1,19 @@
 {% extends "rgz/rgz.html" %}
 
 {% block main %}
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: cursive;
+            padding-bottom: 100px;
+            background-image: url("{{ url_for('static', filename='rgz/gerb1.png') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.95; 
+        }
+    </style>
     <h1>
         {% if is_edit %}
             Редактирование инициативы
@@ -29,7 +42,7 @@
             </label>
         </div>
 
-
+        {% if not current_user.is_admin %}
         <div>
             <label>
                 <input type="checkbox" name="is_public" {{ 'checked' if initiative.is_public else '' }}>
@@ -39,6 +52,7 @@
         <div>
             Опубликованную инициативу невозможно будет изменить!
         </div>
+        {% endif %}
 
         <button type="submit" style="font-family: cursive;">
             {% if is_edit %}

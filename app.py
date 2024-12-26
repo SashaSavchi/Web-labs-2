@@ -20,7 +20,7 @@ from rgz import rgz
 app = Flask(__name__)
 
 login_manager = LoginManager()
-login_manager.login_view = 'lab8.login'
+login_manager.login_view = 'rgz.login'
 login_manager.init_app(app)
 
 @login_manager.user_loader
@@ -45,8 +45,6 @@ else:
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
 
 db.init_app(app)
-
-
 app.register_blueprint(lab1)
 app.register_blueprint(lab2)
 app.register_blueprint(lab3)
