@@ -3,13 +3,27 @@
 {% block lab %}  Лабораторная работа 9 {% endblock %}
 
 {% block main %}
-
+<style>
+    .btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        color: white;
+        background-color: rgb(98, 155, 139);
+        border: none;
+        border-radius: 5px;
+    }
+    
+    .btn:hover {
+        background-color: rgb(63, 114, 100);
+    }
+</style>
 <h1>Ввод возраста</h1>
 
 <form method="post">
     <label for="age">Введите ваш возраст:</label>
     <input type="number" id="age" name="age" required>
-    <input type="submit" value="Далее">
+    <input type="submit" value="Далее" class="btn">
 </form>
 
 {% endblock %}

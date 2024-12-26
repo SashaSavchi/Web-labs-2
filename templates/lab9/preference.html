@@ -3,6 +3,21 @@
 {% block lab %} Лабораторная работа 9 {% endblock %}
 
 {% block main %}
+<style>
+    .btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        color: white;
+        background-color: rgb(98, 155, 139);
+        border: none;
+        border-radius: 5px;
+    }
+    
+    .btn:hover {
+        background-color: rgb(63, 114, 100);
+    }
+</style>
 <h1>Ваши предпочтения</h1>
 <form method="post">
     <label>Что вам больше нравится?</label><br>
@@ -14,6 +29,6 @@
     <label for="gifts">Подарки</label><br>
     <input type="radio" id="food" name="preference" value="еда" required>
     <label for="food">Еда</label><br>
-    <input type="submit" value="Далее">
+    <input type="submit" value="Далее" class="btn">
 </form>
 {% endblock %}

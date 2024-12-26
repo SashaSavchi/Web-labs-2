@@ -15,10 +15,11 @@
             font-family: cursive;
             padding-bottom: 100px;
             background-image: url("{{ url_for('static', filename='rgz/gerb.png') }}");
-            background-size: 50%;
+            background-size: contain; 
             background-position: center;
             background-repeat: no-repeat;
-            opacity: 0.95; 
+            background-attachment: fixed; 
+            opacity: 0.95;
         }
         header {
             top: 0;
