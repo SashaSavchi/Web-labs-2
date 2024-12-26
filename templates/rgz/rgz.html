@@ -172,6 +172,12 @@
             background-color: rgb(80, 27, 140);;
         }
         
+        button.selected {
+            background-color: green;
+            color: white;
+            font-weight: bold;
+        }
+        
         
     </style>
     <script>
@@ -198,24 +204,31 @@
 <body>
     <div class="notification-container">
         {% if message == 'success_reg' %}
-        <div id="notification" class="notification">
-            <strong>Успешная регистрация!</strong> Нажмите <a href="{{ url_for('rgz.login') }}">сюда</a>, чтобы войти в систему.
-            <button class="close" onclick="closeNotification()">×</button>
-        </div>
+            <div id="notification" class="notification">
+                <strong>Успешная регистрация!</strong> Нажмите <a href="{{ url_for('rgz.login') }}">сюда</a>, чтобы войти в систему.
+                <button class="close" onclick="closeNotification()">×</button>
+            </div>
         {% endif %}
         {% if message == 'success_log' %}
-        <div id="notification" class="notification" data-auto-close="true">
-            <strong>Успешный вход в систему!</strong>
-            <button class="close" onclick="closeNotification()">×</button>
-        </div>
+            <div id="notification" class="notification" data-auto-close="true">
+                <strong>Успешный вход в систему!</strong>
+                <button class="close" onclick="closeNotification()">×</button>
+            </div>
         {% endif %}
         {% if message == 'account_deleted' %}
-        <div id="notification" class="notification" data-auto-close="true">
-            <strong>Аккаунт удалён успешно!</strong>
-            <button class="close" onclick="closeNotification()">×</button>
-        </div>
+            <div id="notification" class="notification" data-auto-close="true">
+                <strong>Аккаунт удалён успешно!</strong>
+                <button class="close" onclick="closeNotification()">×</button>
+            </div>
         {% endif %}
-
+        {% if message == 'already_voted' %}
+            <div class="notification">
+                Вы уже проголосовали за инициативу "{{ title }}".
+                <button class="close" onclick="this.parentElement.style.display='none';">×</button>
+            </div>
+        {% endif %}
+    
+        
     </div>
 
     <header>
@@ -230,17 +243,29 @@
         </h1>
         
         <ol>
-            {% for initiative in initiatives.items %}
+            {% for initiative in initiatives %}
                 <li>
-                    <strong>{{ initiative.title }}</strong> 
-                    <p style="word-wrap: break-word;">{{ initiative.text }}</p> 
+                    <strong>{{ initiative.title }}</strong>
+                    <p style="word-wrap: break-word;">{{ initiative.text }}</p>
                     <div class="initiative-meta">
-                        Автор: {{ initiative.user.login }} Дата публикации: {{ initiative.created_at.strftime('%d-%m-%Y') }}
+                        Автор: {{ initiative.user.login }} Дата публикации: {{ initiative.created_at.strftime('%d-%m-%Y') }} <br>
+                        Голоса: {{ initiative.votes_count }}
                     </div>
+                    <form method="post" action="/rgz/vote/{{ initiative.id }}">
+                        <button type="submit" name="vote" value="up"
+                            {% if user_votes.get(initiative.id) == 1 %}class="selected"{% endif %}>
+                            &#128077;
+                        </button>
+                        <button type="submit" name="vote" value="down"
+                            {% if user_votes.get(initiative.id) == -1 %}class="selected"{% endif %}>
+                            &#128078;
+                        </button>
+                    </form>
                 </li>
             {% endfor %}
         </ol>
         
+         
         <div>
             {% if initiatives.has_prev %}
                 <a href="{{ url_for('rgz.rgz_page', page=initiatives.prev_num) }}">← Предыдущая</a>

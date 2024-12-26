@@ -8,7 +8,7 @@ class users(db.Model, UserMixin):
     password = db.Column(db.String(162), nullable = False)
     is_admin = db.Column(db.Boolean, default=False)
     initiatives = db.relationship('initiative', backref='user', lazy=True)
-    
+
 
 class articles(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -24,7 +24,16 @@ class initiative(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(150), nullable=False)
     text = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow) 
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    published_at = db.Column(db.DateTime, default=datetime.utcnow)
     is_public = db.Column(db.Boolean)
-    votes = db.Column(db.Integer, default=0) 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    votes_count = db.Column(db.Integer, default=0)  
+    votes = db.relationship('Vote', backref='initiative', lazy=True)
+
+
+class Vote(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    initiative_id = db.Column(db.Integer, db.ForeignKey('initiative.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    value = db.Column(db.Integer)  

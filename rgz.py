@@ -1,9 +1,9 @@
 from flask import Blueprint, redirect, render_template, request, url_for
 from db import db
-from db.models import initiative, users
+from db.models import initiative, users, Vote
 from flask_login import login_user, login_required, current_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
-
+from datetime import datetime
 rgz = Blueprint('rgz', __name__) 
 
 @rgz.route('/rgz/')
@@ -14,9 +14,12 @@ def rgz_page():
         .filter_by(is_public=True) \
         .order_by(initiative.created_at.desc()) \
         .paginate(page=page, per_page=per_page, error_out=False)
-    
+    user_votes = {
+        vote.initiative_id: vote.value for vote in db.session.query(Vote).filter_by(user_id=current_user.id).all()
+    }
     message = request.args.get('message', None)
-    return render_template('rgz/rgz.html', initiatives=initiatives, message=message)
+    title = request.args.get('title')
+    return render_template('rgz/rgz.html', initiatives=initiatives, message=message, user_votes=user_votes, title=title)
 
 
 @rgz.route('/rgz/register', methods=['GET', 'POST'])
@@ -99,7 +102,8 @@ def create():
         user_id=current_user.id, 
         title=title, 
         text=text, 
-        is_public=is_public
+        is_public=is_public,
+        published_at=datetime.utcnow() if is_public else None
     )
     db.session.add(new_initiative)
     db.session.commit()
@@ -135,6 +139,11 @@ def edit(initiative_id):
 
     initiative_obj.title = title
     initiative_obj.text = text
+
+
+    if is_public and not initiative_obj.is_public:
+        initiative_obj.published_at = datetime.utcnow()
+
     initiative_obj.is_public = is_public
     db.session.commit()
 
@@ -148,6 +157,8 @@ def delete(initiative_id):
     
     if initiative_to_delete:
         if current_user.is_admin or initiative_to_delete.user_id == current_user.id:
+            db.session.query(Vote).filter(Vote.initiative_id == initiative_id).delete()
+
             db.session.delete(initiative_to_delete)
             db.session.commit()
 
@@ -160,19 +171,22 @@ def delete(initiative_id):
 @login_required
 def delete_account():
     if not current_user.is_admin:
-            user = db.session.query(users).filter_by(id=current_user.id).first()
-            if user:
-                initiatives_to_delete = db.session.query(initiative).filter(
-                    initiative.user_id == user.id
-                ).all()
-                for initiative_item in initiatives_to_delete: 
-                    db.session.delete(initiative_item)
+        user = db.session.query(users).filter_by(id=current_user.id).first()
+        if user:
+            initiatives_to_delete = db.session.query(initiative).filter(
+                initiative.user_id == user.id
+            ).all()
+            for initiative_item in initiatives_to_delete:
+                db.session.query(Vote).filter(Vote.initiative_id == initiative_item.id).delete()
+                db.session.delete(initiative_item)
+            
+            db.session.query(Vote).filter(Vote.user_id == user.id).delete()
 
-                db.session.delete(user)
-                db.session.commit()
-                
-            logout_user()
-            return redirect('/rgz/')
+            db.session.delete(user)
+            db.session.commit()
+        
+        logout_user()
+        return redirect('/rgz/')
     
     user_id = request.form.get('user_id')
     user_to_delete = db.session.query(users).filter_by(id=user_id).first()
@@ -182,7 +196,11 @@ def delete_account():
             initiative.user_id == user_to_delete.id
         ).all()
         for initiative_item in initiatives_to_delete:
+            db.session.query(Vote).filter(Vote.initiative_id == initiative_item.id).delete()
             db.session.delete(initiative_item)
+        
+        db.session.query(Vote).filter(Vote.user_id == user_to_delete.id).delete()
+
         db.session.delete(user_to_delete)
         db.session.commit()
     
@@ -207,3 +225,36 @@ def initiative_management():
 
     all_initiatives = db.session.query(initiative).all()
     return render_template('rgz/initiative_management.html', initiatives=all_initiatives)
+
+
+@rgz.route('/rgz/vote/<int:initiative_id>', methods=['POST'])
+@login_required
+def vote(initiative_id):
+    initiative_obj = db.session.query(initiative).filter_by(id=initiative_id).first()
+
+    vote_type = request.form.get('vote')
+    vote_value = 1 if vote_type == 'up' else -1
+
+    user_vote = db.session.query(Vote).filter_by(user_id=current_user.id, initiative_id=initiative_id).first()
+
+    if user_vote:
+        if user_vote.value == vote_value:
+            return redirect(f'/rgz/?message=already_voted&title={initiative_obj.title}')
+        elif user_vote.value != vote_value:
+            initiative_obj.votes_count -= user_vote.value 
+            user_vote.value = vote_value 
+            initiative_obj.votes_count += vote_value 
+    else:
+        new_vote = Vote(user_id=current_user.id, initiative_id=initiative_id, value=vote_value)
+        db.session.add(new_vote)
+        initiative_obj.votes_count += vote_value
+
+    db.session.commit()
+
+    if initiative_obj.votes_count < -10:
+        db.session.delete(initiative_obj)
+        db.session.commit()
+
+    return redirect('/rgz/')
+
+

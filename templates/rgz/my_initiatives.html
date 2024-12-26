@@ -8,7 +8,13 @@
                 <strong>{{ initiative.title }}</strong> 
                 <p style="word-wrap: break-word;">{{ initiative.text }}</p>
                 <div class="initiative-meta">
-                    Автор: {{ initiative.user.login }} Дата публикации: {{ initiative.created_at.strftime('%d-%m-%Y') }}
+                    Автор: {{ initiative.user.login }} Дата создания: {{ initiative.created_at.strftime('%d-%m-%Y') }}
+                    {% if initiative.is_public %}
+                        <br>
+                        Дата публикации: {{ initiative.published_at.strftime('%d-%m-%Y') }}
+                        <br>
+                        Голоса: {{ initiative.votes_count }}
+                    {% endif %}
                 </div>
                 <div>
                     {% if not initiative.is_public %} 
@@ -33,7 +39,11 @@
                 <strong>{{ published.title }}</strong> 
                 <p style="word-wrap: break-word;">{{ published.text }}</p> 
                 <div class="initiative-meta">
-                    Автор: {{ published.user.login }} Дата публикации: {{ published.created_at.strftime('%d-%m-%Y') }}
+                    Автор: {{ published.user.login }} Дата создания: {{ published.created_at.strftime('%d-%m-%Y') }}
+                    <br>
+                    Дата публикации: {{ published.published_at.strftime('%d-%m-%Y') }}
+                    <br>
+                    Голоса: {{ published.votes_count }}
                 </div>
                 <div>
                     <form method="post" action="/rgz/delete/{{ published.id }}" style="display: inline-block;">  
