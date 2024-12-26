@@ -4,47 +4,94 @@
 
 {% block main %}
 <style>
+    header {
+        background-color: black;
+        padding: 10px;
+    }
+    body{
+        background-color: black;
+    }
+    main {
+        margin: 0;
+        padding: 0;
+        background-image: url("{{ url_for('static', filename='lab9/snow3.gif') }}");
+        background-size: cover;
+        background-color: black;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed; 
+        opacity: 0.95;
+        display: flex;
+        align-items: center; 
+        justify-content: center; 
+        height: 100vh; 
+    }
+    
+    .main-container {
+        display: flex;
+        flex-direction: column; 
+        justify-content: center;
+        align-items: center;
+        background-color: white; 
+        padding: 40px; 
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    }
+    
     .btn {
         padding: 10px 20px;
         font-size: 16px;
         cursor: pointer;
         color: white;
-        background-color: rgb(98, 155, 139);
+        background-color: rgb(255, 69, 0); 
         border: none;
         border-radius: 5px;
+        
     }
     
     .btn:hover {
-        background-color: rgb(63, 114, 100);
+        background-color: rgb(220, 20, 60);
     }
-</style>
-<h1>Подбор предпочтений</h1>
-<form method="post">
-    {% if preference == 'веселье' %}
-        <label>Что вам нравится больше?</label><br>
-        <input type="radio" id="toys" name="preference_n" value="плюшевые игрушки" required>
-        <label for="toys">Плюшевые игрушки</label><br>
-        <input type="radio" id="games" name="preference_n" value="настольные игры" required>
-        <label for="games">Настольные игры</label><br>
-    {% elif preference == 'сладости' %}
-        <label>Что вам нравится больше?</label><br>
-        <input type="radio" id="candies" name="preference_n" value="конфеты" required>
-        <label for="candies">Конфеты</label><br>
-        <input type="radio" id="cookies" name="preference_n" value="печенье" required>
-        <label for="cookies">Печенье</label><br>
-    {% elif preference == 'подарки' %}
-        <label>Что вам нравится больше?</label><br>
-        <input type="radio" id="tech" name="preference_n" value="технологии" required>
-        <label for="tech">Технологии</label><br>
-        <input type="radio" id="decor" name="preference_n" value="декор" required>
-        <label for="decor">Декор</label><br>
-    {% elif preference == 'еда' %}
-        <label>Что вам нравится больше?</label><br>
-        <input type="radio" id="cake" name="preference_n" value="торт" required>
-        <label for="cake">Торт</label><br>
-        <input type="radio" id="chocolate" name="preference_n" value="шоколад" required>
-        <label for="chocolate">Шоколад</label><br>
-    {% endif %}
-    <input type="submit" value="Далее" class="btn">
-</form>
+    
+    .header9 {
+        color: black; 
+    }
+
+    label, input {
+        color: black;
+        position: relative;
+    }
+
+    footer {
+        background-color: rgba(0, 0, 0, 0);
+    }
+    
+    </style>
+    <div class="main-container">
+        <h1>Что вам нравится больше?</h1>
+        <form method="post">
+            {% if preference == 'веселье' %}
+                <input type="radio" id="toys" name="preference_n" value="плюшевые игрушки" required>
+                <label for="toys">Плюшевые игрушки</label><br>
+                <input type="radio" id="games" name="preference_n" value="настольные игры" required>
+                <label for="games">Настольные игры</label><br>
+            {% elif preference == 'сладости' %}
+                <input type="radio" id="candies" name="preference_n" value="конфеты" required>
+                <label for="candies">Конфеты</label><br>
+                <input type="radio" id="cookies" name="preference_n" value="печенье" required>
+                <label for="cookies">Печенье</label><br>
+            {% elif preference == 'подарки' %}
+                <input type="radio" id="tech" name="preference_n" value="технологии" required>
+                <label for="tech">Технологии</label><br>
+                <input type="radio" id="decor" name="preference_n" value="декор" required>
+                <label for="decor">Декор</label><br>
+            {% elif preference == 'еда' %}
+                <input type="radio" id="cake" name="preference_n" value="торт" required>
+                <label for="cake">Торт</label><br>
+                <input type="radio" id="chocolate" name="preference_n" value="шоколад" required>
+                <label for="chocolate">Шоколад</label><br>
+            {% endif %}
+            <input type="submit" value="Далее" class="btn">
+        </form>
+    </div>
 {% endblock %}

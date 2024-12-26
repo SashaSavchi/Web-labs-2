@@ -4,31 +4,89 @@
 
 {% block main %}
 <style>
+    header {
+        background-color: black;
+        padding: 10px;
+    }
+    body {
+        background-color: black;
+    }
+    main {
+        margin: 0;
+        padding: 0;
+        background-image: url("{{ url_for('static', filename='lab9/snow3.gif') }}");
+        background-size: cover;
+        background-color: black;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed; 
+        opacity: 0.95;
+        display: flex;
+        align-items: center; 
+        justify-content: center; 
+        height: 100vh; 
+    }
+    
+    .main-container {
+        display: flex;
+        flex-direction: column; 
+        justify-content: center;
+        align-items: center;
+        background-color: white; 
+        padding: 40px; 
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    }
+    
+    .preferences {
+        display: flex;
+        justify-content: center; 
+        gap: 20px; 
+        margin-bottom: 20px; 
+    }
+
     .btn {
         padding: 10px 20px;
         font-size: 16px;
         cursor: pointer;
         color: white;
-        background-color: rgb(98, 155, 139);
+        background-color: rgb(255, 69, 0); 
         border: none;
         border-radius: 5px;
     }
     
     .btn:hover {
-        background-color: rgb(63, 114, 100);
+        background-color: rgb(220, 20, 60);
     }
+    
+    .header9 {
+        color: black; 
+    }
+
+    label, input {
+        color: black;
+    }
+
+    footer {
+        background-color: rgba(0, 0, 0, 0);
+    }
+
 </style>
-<h1>Ваши предпочтения</h1>
-<form method="post">
-    <label>Что вам больше нравится?</label><br>
-    <input type="radio" id="fun" name="preference" value="веселье" required>
-    <label for="fun">Веселье</label><br>
-    <input type="radio" id="sweets" name="preference" value="сладости" required>
-    <label for="sweets">Сладости</label><br>
-    <input type="radio" id="gifts" name="preference" value="подарки" required>
-    <label for="gifts">Подарки</label><br>
-    <input type="radio" id="food" name="preference" value="еда" required>
-    <label for="food">Еда</label><br>
-    <input type="submit" value="Далее" class="btn">
-</form>
+
+<div class="main-container">
+    <h1>Что вам больше нравится?</h1>
+    <form method="post">
+        <div class="preferences">
+            <input type="radio" id="fun" name="preference" value="веселье" required>
+            <label for="fun">Веселье</label>
+            <input type="radio" id="sweets" name="preference" value="сладости" required>
+            <label for="sweets">Сладости</label>
+            <input type="radio" id="gifts" name="preference" value="подарки" required>
+            <label for="gifts">Подарки</label>
+            <input type="radio" id="food" name="preference" value="еда" required>
+            <label for="food">Еда</label>
+        </div>
+        <input type="submit" value="Далее" class="btn">
+    </form>
+</div>
 {% endblock %}

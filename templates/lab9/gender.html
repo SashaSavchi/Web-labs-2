@@ -4,26 +4,86 @@
 
 {% block main %}
 <style>
+    header {
+        background-color: black;
+        padding: 10px;
+    }
+    body{
+        background-color: black;
+    }
+    main {
+        margin: 0;
+        padding: 0;
+        background-image: url("{{ url_for('static', filename='lab9/snow3.gif') }}");
+        background-size: cover;
+        background-color: black;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed; 
+        opacity: 0.95;
+        display: flex;
+        align-items: center; 
+        justify-content: center; 
+        height: 100vh; 
+    }
+    
+    .main-container {
+        display: flex;
+        flex-direction: column; 
+        justify-content: center;
+        align-items: center;
+        background-color: white; 
+        padding: 40px; 
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    }
+    
     .btn {
         padding: 10px 20px;
         font-size: 16px;
         cursor: pointer;
         color: white;
-        background-color: rgb(98, 155, 139);
+        background-color: rgb(255, 69, 0); 
         border: none;
         border-radius: 5px;
+        
     }
     
     .btn:hover {
-        background-color: rgb(63, 114, 100);
+        background-color: rgb(220, 20, 60);
     }
-</style>
-<h1>Выберете ваш пол</h1>
-<form method="post">
-    <input type="radio" id="male" name="gender" value="male" required>
-    <label for="male">Мужской</label><br>
-    <input type="radio" id="female" name="gender" value="female" required>
-    <label for="female">Женский</label><br>
-    <input type="submit" value="Далее" class="btn">
-</form>
+    
+    .header9 {
+        color: black; 
+    }
+
+    label, input {
+        color: black;
+        position: relative;
+    }
+
+    .gender-options {
+        display: flex; /* Используем Flexbox для горизонтального расположения */
+        gap: 20px; 
+    }
+
+    footer {
+        background-color: rgba(0, 0, 0, 0);
+    }
+    
+    </style>
+    
+    <div class="main-container">
+        <h1>Выберете ваш пол</h1>
+        <form method="post">
+            <div class="gender-options">
+                <input type="radio" id="male" name="gender" value="male" required>
+                <label for="male">Мужской</label>
+                <input type="radio" id="female" name="gender" value="female" required>
+                <label for="female">Женский</label>
+            </div>
+            <br>
+            <input type="submit" value="Далее" class="btn">
+        </form>
+    </div>    
 {% endblock %}
